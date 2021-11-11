@@ -1,0 +1,26 @@
+﻿@model WebUI.ViewModels.ProjectsListViewModel
+
+<div class="container">
+    <h2 class="text-star">Projects</h2>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <td>Project name</td>
+                <td>Department</td>
+                <td>Cedacri International responsible user</td>
+                <td>Cedacri Italia responsible user</td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var project in Model.Projects)
+            {
+                <tr>
+                    <td>@project.Name</td>
+                    <td>@project.Department.Name</td>
+                    <td>-</td>
+                    <td>-</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

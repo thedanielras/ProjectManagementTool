@@ -6,8 +6,8 @@ namespace Domain.Entities
 {
     public class ProjectSource
     {
-        public int Id { get; set; }
-        public Uri SourceUri { get; set; }
+        public int ProjectSourceId { get; set; }
+        public string SourceUrl { get; set; }
         public ProjectSourceType Type { get; set; }
     }
 

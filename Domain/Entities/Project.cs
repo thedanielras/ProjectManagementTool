@@ -11,9 +11,9 @@ namespace Domain.Entities
             ProjectSources = new List<ProjectSource>();
         }
 
-        public int Id { get; set; }
+        public int ProjectId { get; set; }
         public string Name { get; set; }
         public Department Department { get; set; }
-        public IEnumerable<ProjectSource> ProjectSources { get; private set; }
+        public IEnumerable<ProjectSource> ProjectSources { get; set; }
     }
 }
