@@ -1,8 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Persistence.Migrations
 {
-    public partial class InitialMigration : Migration
+    public partial class Initial_Migration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -10,9 +11,8 @@ namespace Persistence.Migrations
                 name: "Department",
                 columns: table => new
                 {
-                    DepartmentId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(nullable: true)
+                    DepartmentId = table.Column<Guid>(nullable: false),
+                    Name = table.Column<string>(maxLength: 200, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -20,13 +20,26 @@ namespace Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "User",
+                columns: table => new
+                {
+                    UserId = table.Column<Guid>(nullable: false),
+                    Name = table.Column<string>(maxLength: 20, nullable: false),
+                    Password = table.Column<string>(maxLength: 20, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_User", x => x.UserId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Projects",
                 columns: table => new
                 {
-                    ProjectId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(nullable: true),
-                    DepartmentId = table.Column<int>(nullable: true)
+                    ProjectId = table.Column<Guid>(nullable: false),
+                    Name = table.Column<string>(maxLength: 200, nullable: false),
+                    DepartmentId = table.Column<Guid>(nullable: false),
+                    UserId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -36,18 +49,23 @@ namespace Persistence.Migrations
                         column: x => x.DepartmentId,
                         principalTable: "Department",
                         principalColumn: "DepartmentId",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Projects_User_UserId",
+                        column: x => x.UserId,
+                        principalTable: "User",
+                        principalColumn: "UserId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "ProjectSource",
                 columns: table => new
                 {
-                    ProjectSourceId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    SourceUrl = table.Column<string>(nullable: true),
-                    Type = table.Column<int>(nullable: false),
-                    ProjectId = table.Column<int>(nullable: true)
+                    ProjectSourceId = table.Column<Guid>(nullable: false),
+                    SourceUrl = table.Column<string>(maxLength: 100, nullable: false),
+                    Type = table.Column<int>(nullable: false, defaultValue: 2),
+                    ProjectId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -57,13 +75,18 @@ namespace Persistence.Migrations
                         column: x => x.ProjectId,
                         principalTable: "Projects",
                         principalColumn: "ProjectId",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Projects_DepartmentId",
                 table: "Projects",
                 column: "DepartmentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Projects_UserId",
+                table: "Projects",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProjectSource_ProjectId",
@@ -81,6 +104,9 @@ namespace Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "Department");
+
+            migrationBuilder.DropTable(
+                name: "User");
         }
     }
 }

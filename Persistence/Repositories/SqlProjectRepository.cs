@@ -24,7 +24,7 @@ namespace Persistence.Repositories
             }
         }
 
-        public Project GetProjectById(int projectId)
+        public Project GetProjectById(Guid projectId)
         {
             return _dbContext.Projects.FirstOrDefault(p => p.ProjectId == projectId);
         }

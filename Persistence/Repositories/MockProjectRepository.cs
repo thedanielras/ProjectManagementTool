@@ -13,7 +13,7 @@ namespace Persistence.Repositories
         {
             new Project 
             { 
-                ProjectId = 1,
+                ProjectId = new Guid(),
                 Name = "SomeProject1",
                 Department = new Department { Name = ".NET" },
                 ProjectSources = new List<ProjectSource> 
@@ -27,7 +27,7 @@ namespace Persistence.Repositories
             },
             new Project
             {
-                ProjectId = 2,
+                ProjectId = new Guid(),
                 Name = "SomeProject2",
                 Department = new Department { Name = "Java" },
                 ProjectSources = new List<ProjectSource>
@@ -41,9 +41,14 @@ namespace Persistence.Repositories
             }
         };
 
-        public Project GetProjectById(int projectId)
+        public Project GetProjectById(Guid projectId)
         {
             return AllProjects.FirstOrDefault(p => p.ProjectId == projectId);
+        }
+
+        public Project GetProjectById(int projectId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

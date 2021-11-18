@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Persistence.Configuration;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text;
 
 namespace Persistence
@@ -16,7 +17,7 @@ namespace Persistence
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfiguration(new ProjectConfiguration());
+            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
 
         public DbSet<Project> Projects { get; set; }

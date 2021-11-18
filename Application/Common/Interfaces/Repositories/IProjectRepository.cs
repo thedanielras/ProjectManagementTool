@@ -8,6 +8,6 @@ namespace Application.Common.Interfaces.Repositories
     public interface IProjectRepository
     {
         IEnumerable<Project> AllProjects { get; }
-        Project GetProjectById(int projectId);
+        Project GetProjectById(Guid projectId);
     }
 }

@@ -11,9 +11,27 @@ namespace Persistence.Configuration
     {
         public void Configure(EntityTypeBuilder<Project> builder)
         {
+            builder
+                .HasKey(p => p.ProjectId);
+                       
+            builder
+                .Property(p => p.Name)
+                .IsRequired()
+                .HasMaxLength(200);
 
+            builder
+                .HasOne(p => p.Department)
+                .WithMany(d => d.Projects)
+                .HasPrincipalKey(d => d.DepartmentId)
+                .HasForeignKey(p => p.DepartmentId);
 
+            builder
+                .HasMany(p => p.ProjectSources)
+                .WithOne(ps => ps.Project)
+                .HasPrincipalKey(p => p.ProjectId)
+                .HasForeignKey(ps => ps.ProjectId);             
 
+                        
 
             /*
             builder.HasData(
