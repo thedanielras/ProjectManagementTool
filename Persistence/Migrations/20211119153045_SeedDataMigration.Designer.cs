@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence;
 
 namespace Persistence.Migrations
 {
     [DbContext(typeof(ProjectManagementToolDbContext))]
-    partial class ProjectManagementToolDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211119153045_SeedDataMigration")]
+    partial class SeedDataMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -56,22 +58,19 @@ namespace Persistence.Migrations
                     b.Property<Guid>("DepartmentId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("ForeignResponsibleUserId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
-                    b.Property<Guid>("ResponsibleUserId")
+                    b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("ProjectId");
 
                     b.HasIndex("DepartmentId");
 
-                    b.HasIndex("ResponsibleUserId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Projects");
 
@@ -81,14 +80,14 @@ namespace Persistence.Migrations
                             ProjectId = new Guid("b7ababb7-e4be-4a85-8b7f-c045ee258388"),
                             DepartmentId = new Guid("e3e81151-2092-4921-8f8c-e0fe3800fa4d"),
                             Name = "Aquilla",
-                            ResponsibleUserId = new Guid("3af87455-f8ea-44b8-a33f-5bc89f433697")
+                            UserId = new Guid("3af87455-f8ea-44b8-a33f-5bc89f433697")
                         },
                         new
                         {
                             ProjectId = new Guid("51ba2c30-b20a-4686-971f-4575860edd5a"),
                             DepartmentId = new Guid("6d0484d4-b777-439c-8174-eb2b213349b8"),
                             Name = "PWS",
-                            ResponsibleUserId = new Guid("3af87455-f8ea-44b8-a33f-5bc89f433697")
+                            UserId = new Guid("3af87455-f8ea-44b8-a33f-5bc89f433697")
                         });
                 });
 
@@ -171,9 +170,9 @@ namespace Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Entities.User", "ResponsibleUser")
+                    b.HasOne("Domain.Entities.User", "User")
                         .WithMany("Projects")
-                        .HasForeignKey("ResponsibleUserId")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
