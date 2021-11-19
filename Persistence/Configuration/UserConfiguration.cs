@@ -24,8 +24,8 @@ namespace Persistence.Configuration
 
             builder
                 .HasMany(u => u.Projects)
-                .WithOne(p => p.User)
-                .HasForeignKey(p => p.UserId)
+                .WithOne(p => p.ResponsibleUser)
+                .HasForeignKey(p => p.ResponsibleUserId)
                 .HasPrincipalKey(u => u.UserId);
         }
     }

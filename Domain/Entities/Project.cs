@@ -19,7 +19,8 @@ namespace Domain.Entities
         
         public IEnumerable<ProjectSource> ProjectSources { get; set; }
 
-        public Guid UserId { get; set; }
-        public User User { get; set; }
+        public Guid ResponsibleUserId { get; set; }
+        public Guid? ForeignResponsibleUserId { get; set; }
+        public User ResponsibleUser { get; set; }
     }
 }
