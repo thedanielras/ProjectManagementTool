@@ -1,5 +1,6 @@
 ﻿using Application.Common.Interfaces.Repositories;
 using Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,13 +21,21 @@ namespace Persistence.Repositories
         {
             get 
             {
-                return _dbContext.Projects.ToList();
+                return _dbContext.Projects
+                    .Include(p => p.ResponsibleUser)
+                    .Include(p => p.ProjectSources)
+                    .Include(p => p.Department)
+                    .ToList();
             }
         }
 
         public Project GetProjectById(Guid projectId)
         {
-            return _dbContext.Projects.FirstOrDefault(p => p.ProjectId == projectId);
+            return _dbContext.Projects
+                    .Include(p => p.ResponsibleUser)
+                    .Include(p => p.ProjectSources)
+                    .Include(p => p.Department)
+                    .FirstOrDefault(p => p.ProjectId == projectId);
         }
     }
 }
