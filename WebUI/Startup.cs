@@ -46,7 +46,7 @@ namespace WebUI
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Project}/{action=List}/{id?}"
+                    pattern: "{controller=Projects}/{action=List}/{id?}"
                 );
             });
         }

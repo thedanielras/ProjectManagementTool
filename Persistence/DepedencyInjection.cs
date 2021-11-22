@@ -13,6 +13,7 @@ namespace Persistence
         public static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration) 
         {
             services.AddScoped<IProjectRepository, SqlProjectRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
             return services;
         }
     }

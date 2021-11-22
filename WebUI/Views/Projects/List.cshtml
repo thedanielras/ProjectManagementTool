@@ -1,4 +1,16 @@
 ﻿@model WebUI.ViewModels.ProjectsListViewModel
+@section scripts 
+{ 
+    <script>
+        $(".project_row").click(function () {
+            let projectId = $(".project_row input[name='projectId']").val();
+
+            console.log(projectId);
+
+        });
+       
+    </script>
+}
 
 <div class="container">
     <h2 class="text-star">Projects</h2>
@@ -14,7 +26,8 @@
         <tbody>
             @foreach (var project in Model.Projects)
             {
-                <tr>
+                <tr class="project_row">
+                    <td style="display: none;"><input name="projectId" type="hidden" value="@project.ProjectId"/></td>
                     <td>@project.Name</td>
                     <td>@project.Department.Name</td>
                     <td>@project.ResponsibleUser.Name</td>

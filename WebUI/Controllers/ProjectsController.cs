@@ -8,11 +8,11 @@ using WebUI.ViewModels;
 
 namespace WebUI.Controllers
 {
-    public class ProjectController : Controller
+    public class ProjectsController : Controller
     {
         private readonly IProjectRepository _projectRepository;
 
-        public ProjectController(IProjectRepository projectRepository)
+        public ProjectsController(IProjectRepository projectRepository)
         {
             _projectRepository = projectRepository;
         }
