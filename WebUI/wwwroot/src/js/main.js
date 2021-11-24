@@ -1,4 +1,10 @@
-﻿$(document).ready(function ()
+﻿const responseType =
+{
+    OK: 0,
+    KO: 1
+}
+
+$(document).ready(function ()
 {
     let username = getCookie("username");
     let password = getCookie("password");
@@ -6,13 +12,28 @@
     {
         $("#user_session").html('<span class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">' + username + '</span>')
     }
-
 });
 
-$(document).bind("ajaxSend", function () {
-    console.log("is loading");
-}).bind("ajaxComplete", function () {
-    console.log("loaded");
+$(document).ajaxComplete(function (event, xhr, settings) {
+    let response = xhr.responseJSON;
+    debugger;
+    if (response.hasOwnProperty("responseType") && response.responseType != null)
+    {
+        switch (response.responseType) {
+            case responseType.OK:
+                alert("OK")
+                break;
+            case responseType.KO:
+                alert("KO")
+                break;
+        }
+        return;
+    }
+
+    if (xhr.status !== 200)
+    {
+        alert("KO")
+    }
 });
 
 function getCookie(cname) {

@@ -1,39 +1,63 @@
 ﻿@model WebUI.ViewModels.ProjectsListViewModel
-@section scripts 
-{ 
-    <script>
-        $(".project_row").click(function () {
-            let projectId = $(".project_row input[name='projectId']").val();
-
-            console.log(projectId);
-
-        });
-       
-    </script>
-}
 
 <div class="container">
     <h2 class="text-star">Projects</h2>
-    <table class="table table-striped">
+    <table id="projects_table" class="table table-hover">
         <thead>
             <tr>
-                <td>Project name</td>
-                <td>Department</td>
-                <td>Cedacri International responsible user</td>
-                <td>Cedacri Italia responsible user</td>
+                <th>Project name</th>
+                <th>Department</th>
+                <th>Cedacri International responsible user</th>
+                <th>Cedacri Italia responsible user</th>
             </tr>
         </thead>
-        <tbody>
-            @foreach (var project in Model.Projects)
-            {
-                <tr class="project_row">
-                    <td style="display: none;"><input name="projectId" type="hidden" value="@project.ProjectId"/></td>
-                    <td>@project.Name</td>
-                    <td>@project.Department.Name</td>
-                    <td>@project.ResponsibleUser.Name</td>
-                    <td>-</td>
-                </tr>
-            }
+        <tbody>          
         </tbody>
     </table>
 </div>
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+          var projectsTable = $('#projects_table').DataTable(
+                {
+                    ajax: {
+                        url: "/Projects/JsonList",
+                        dataSrc: "payload.projects",
+                    },
+                    columns:
+                        [
+                            { data: "name" },
+                            { data: "department.name" },
+                            { data: "responsibleUser.name" },
+                            { data: "responsibleUser.name" }
+                        ]
+                }              
+            );
+
+            $('#projects_table tbody').on('click', 'tr', function () {         
+                debugger;
+                var data = projectsTable.row(this).data();
+                let projectId = data.projectId;
+                if (projectId != null && projectId != "")
+                {
+                    $.get("/projects/projectDetailViewModal", { id: projectId }, function (data, status, xhr) {
+                        console.log(data);
+                    });
+                }
+
+              
+
+                
+            });
+
+        });       
+
+        /*
+        $("#projects_table").on("click", ".project_row", function () {
+            let projectId = $(this).find(".project_id").val()
+            console.log(projectId);
+        })
+        */
+    </script>
+}
