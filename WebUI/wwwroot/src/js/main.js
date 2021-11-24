@@ -16,24 +16,21 @@ $(document).ready(function ()
 
 $(document).ajaxComplete(function (event, xhr, settings) {
     let response = xhr.responseJSON;
-    debugger;
-    if (response.hasOwnProperty("responseType") && response.responseType != null)
+    if (response && response.responseType)
     {
         switch (response.responseType) {
             case responseType.OK:
-                alert("OK")
                 break;
             case responseType.KO:
-                alert("KO")
+                alert("Server error")
                 break;
         }
         return;
     }
+});
 
-    if (xhr.status !== 200)
-    {
-        alert("KO")
-    }
+$(document).ajaxError(function (event, xhr, settings) {
+    alert("Server error");
 });
 
 function getCookie(cname) {

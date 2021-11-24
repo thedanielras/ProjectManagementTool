@@ -1,0 +1,37 @@
+﻿@model ProjectDto;
+
+<div class="modal-header">
+    <h5 class="modal-title">Project Details</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body">
+    <form>
+        <div class="mt-3 mb-3">
+            <span>Name:</span>
+            <p><strong>@Model.Name</strong></p>
+        </div>
+        <div class="mb-3">
+            <span>Department:</span>
+            <p><strong>@Model.Department.Name</strong></p>
+        </div>
+        <div class="mb-3">
+            <span>Responsible Cedacri International:</span>
+            <p><strong>@Model.ResponsibleUser.Name</strong></p>
+        </div>
+        <div class="mb-3">
+            <span>Responsible Cedacri Italia:</span>
+            <p><strong>@Model.ResponsibleUser.Name</strong></p>
+        </div>
+        <br />
+
+        @foreach (var projectSource in Model.ProjectSources)
+        { 
+            <div class="mb-3">
+                <a href="@projectSource.SourceUrl"></a>
+            </div>
+        }
+    </form>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+</div>

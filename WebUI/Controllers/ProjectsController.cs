@@ -2,12 +2,16 @@
 using AutoMapper;
 using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
+using WebUI.Common.Interfaces;
 using WebUI.Dtos;
+using WebUI.Services;
 using WebUI.ViewModels;
 
 namespace WebUI.Controllers
@@ -16,11 +20,13 @@ namespace WebUI.Controllers
     {
         private readonly IProjectRepository _projectRepository;
         private readonly IMapper _mapper;
+        private readonly IViewRenderService _viewRenderService;
 
-        public ProjectsController(IProjectRepository projectRepository, IMapper mapper)
+        public ProjectsController(IProjectRepository projectRepository, IMapper mapper, IViewRenderService viewRenderService)
         {
             _projectRepository = projectRepository;
             _mapper = mapper;
+            _viewRenderService = viewRenderService;
         }
 
         [HttpGet]
@@ -51,15 +57,18 @@ namespace WebUI.Controllers
         }
 
         [HttpGet]
-        public IActionResult ProjectDetailViewModal(Guid id) 
+        public async Task<IActionResult> ProjectDetailViewModal(Guid id) 
         {
             var project = _projectRepository.AllProjects.Where(p => p.ProjectId == id).FirstOrDefault();
             ResponseViewModel returnModel;
 
             if (project != null)
             {
-                var payload = _mapper.Map<ProjectDto>(project);
-                returnModel = new ResponseViewModel(payload);
+                var projectDto = _mapper.Map<ProjectDto>(project);
+
+                string result = await _viewRenderService.RenderToStringAsync("Projects/_ProjectDetails", projectDto);
+
+                returnModel = new ResponseViewModel(result);
             }
             else
             {
@@ -67,6 +76,21 @@ namespace WebUI.Controllers
             }
 
             return Json(returnModel);
+        }
+
+        [HttpPost]
+        public IActionResult AddProject(Project project)
+        {
+            if (ModelState.IsValid)
+            {
+                Console.WriteLine("Ok");
+            }
+            else 
+            {
+                Console.WriteLine("Ko");
+            }
+
+            return new OkResult();
         }
     }
 }

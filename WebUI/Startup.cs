@@ -4,12 +4,15 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Persistence;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WebUI.Common.Interfaces;
+using WebUI.Services;
 
 namespace WebUI
 {
@@ -30,6 +33,8 @@ namespace WebUI
             services.AddControllersWithViews();
             services.AddPersistence(_configuration);
             services.AddDbContext<ProjectManagementToolDbContext>(options => options.UseSqlServer(_configuration.GetConnectionString("ProjectManagementToolConnection")));
+            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddTransient<IViewRenderService, ViewRenderService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
