@@ -15,17 +15,17 @@ namespace Persistence.Repositories
             _dbContext = dbContext;
         }
 
-        public IEnumerable<User> AllUsers => _dbContext.User.ToList();
+        public IEnumerable<User> AllUsers => _dbContext.Users.ToList();
 
         public void AddUser(User user)
         {
-            _dbContext.User.Add(user);
+            _dbContext.Users.Add(user);
             _dbContext.SaveChanges();
         }
 
         public User GetUserByName(string userName)
         {
-            return _dbContext.User.Where(u => u.Name.Equals(userName)).FirstOrDefault();
+            return _dbContext.Users.Where(u => u.Name.Equals(userName)).FirstOrDefault();
         }
     }
 }

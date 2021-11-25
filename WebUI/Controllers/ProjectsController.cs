@@ -78,6 +78,23 @@ namespace WebUI.Controllers
             return Json(returnModel);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> NewProjectViewModal()
+        {
+            //var allDepartments = 
+
+
+            //IEnumerable<SelectListItem> departmentSelectList = 
+
+
+            //var viewModel = new AddProjectViewModel()
+
+            ResponseViewModel returnModel;
+            string result = await _viewRenderService.RenderToStringAsync("Projects/_AddProject", null);
+            returnModel = new ResponseViewModel(result);
+            return Json(returnModel);
+        }
+
         [HttpPost]
         public IActionResult AddProject(Project project)
         {

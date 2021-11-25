@@ -54,12 +54,11 @@
             });
 
             $("#btn-new-project").click(function () {
-                $.get("/projects/addProject", function (data, status, xhr) {
+                $.get("/projects/newProjectViewModal", function (data, status, xhr) {
                     if (data && data.payload) {
                         $("#content_modal .modal-content").empty().html(data.payload);
                         $("#content_modal").modal('show');
                     }
-
                 });
             });
 
