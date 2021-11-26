@@ -11,6 +11,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using WebUI.Common.Interfaces;
 using WebUI.Dtos;
+using WebUI.Dtos.Project.AddProject;
 using WebUI.Services;
 using WebUI.ViewModels;
 
@@ -19,12 +20,19 @@ namespace WebUI.Controllers
     public class ProjectsController : Controller
     {
         private readonly IProjectRepository _projectRepository;
+        private readonly IUserRepository _userRepository;
+        private readonly IDepartmentRepository _departmentRepository;
         private readonly IMapper _mapper;
         private readonly IViewRenderService _viewRenderService;
 
-        public ProjectsController(IProjectRepository projectRepository, IMapper mapper, IViewRenderService viewRenderService)
+        public ProjectsController(IProjectRepository projectRepository, 
+                                    IUserRepository userRepository,
+                                IDepartmentRepository departmentRepository, 
+                                IMapper mapper, IViewRenderService viewRenderService)
         {
             _projectRepository = projectRepository;
+            _userRepository = userRepository;
+            _departmentRepository = departmentRepository;
             _mapper = mapper;
             _viewRenderService = viewRenderService;
         }
@@ -81,22 +89,28 @@ namespace WebUI.Controllers
         [HttpGet]
         public async Task<IActionResult> NewProjectViewModal()
         {
-            //var allDepartments = 
+            var allDepartments = _departmentRepository.AlLDerartments;
+            var allUsers = _userRepository.AllUsers;
+            var projectSourceTypes = from ProjectSourceType projectSourceType in Enum.GetValues(typeof(ProjectSourceType))
+                                     select new SelectListItem { Text = projectSourceType.ToString(), Value = ((int)projectSourceType).ToString() };
 
+            IEnumerable<SelectListItem> departmentSelectList = allDepartments.Select(x => new SelectListItem { Text = x.Name, Value = x.DepartmentId.ToString() }).ToList();
+            IEnumerable<SelectListItem> userSelectList = allUsers.Select(u => new SelectListItem { Text = u.Name, Value = u.UserId.ToString() }).ToList();
+            IEnumerable<SelectListItem> projectSourceTypeSelectList = projectSourceTypes;
 
-            //IEnumerable<SelectListItem> departmentSelectList = 
+           
+      
 
-
-            //var viewModel = new AddProjectViewModel()
+            var viewModel = new AddProjectViewModel(departmentSelectList, userSelectList, projectSourceTypeSelectList);
 
             ResponseViewModel returnModel;
-            string result = await _viewRenderService.RenderToStringAsync("Projects/_AddProject", null);
+            string result = await _viewRenderService.RenderToStringAsync("Projects/_AddProject", viewModel);
             returnModel = new ResponseViewModel(result);
             return Json(returnModel);
         }
 
         [HttpPost]
-        public IActionResult AddProject(Project project)
+        public IActionResult AddProject(AddProjectDto project)
         {
             if (ModelState.IsValid)
             {

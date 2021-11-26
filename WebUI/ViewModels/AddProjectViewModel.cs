@@ -9,17 +9,17 @@ namespace WebUI.ViewModels
     public class AddProjectViewModel
     {
 
-        public AddProjectViewModel(IEnumerable<SelectListItem> departmentSelectList, 
-                                IEnumerable<SelectListItem> reposnsibleUserSelectList,
-                                IEnumerable<SelectListItem> responsibleUserItaliaSelectList)
+        public AddProjectViewModel(IEnumerable<SelectListItem> departmentSelectList,
+                                IEnumerable<SelectListItem> userSelectList,
+                                IEnumerable<SelectListItem> projectSourceTypeSelectList)
         {
             DepartmentSelectList = departmentSelectList;
-            ReposnsibleUserSelectList = reposnsibleUserSelectList;
-            ResponsibleUserItaliaSelectList = responsibleUserItaliaSelectList;
+            UserSelectList = userSelectList;
+            ProjectSourceTypeSelectList = projectSourceTypeSelectList;
         }
 
         public IEnumerable<SelectListItem> DepartmentSelectList { get; private set; }
-        public IEnumerable<SelectListItem> ReposnsibleUserSelectList { get; private set; }
-        public IEnumerable<SelectListItem> ResponsibleUserItaliaSelectList { get; private set; }
+        public IEnumerable<SelectListItem> UserSelectList { get; private set; }
+        public IEnumerable<SelectListItem> ProjectSourceTypeSelectList { get; private set; }
     }
 }

@@ -14,6 +14,7 @@ namespace Persistence
         {
             services.AddScoped<IProjectRepository, SqlProjectRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IDepartmentRepository, DepartmentRepository>();
             return services;
         }
     }

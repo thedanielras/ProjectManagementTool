@@ -1,38 +1,152 @@
 ﻿@model AddProjectViewModel
+
+
 <div class="modal-header">
     <h5 class="modal-title">Project Details</h5>
     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 </div>
 <div class="modal-body">
-
-    <form action="/projects/addProject" method="post" id="add-project_form">
-        <div class="mb-3 mt-3">
-            <label for="project-name" class="form-label">Name</label>
-            <input type="tel" class="form-control" id="project-name" placeholder="Name:" name="project-name">
+    <form action="/projects/addProject" method="post" id="add-project-form">
+        <!-- Project name -->
+        <div class="mt-3">
+            <label for="add-project-form_project-name" class="form-label">Name</label>
+            <input type="tel" class="form-control" id="add-project-form_project-name" placeholder="Name" name="name">
         </div>
-
-        @Html.DropDownList("department", Model.DepartmentSelectList, "Department")
-
-        @*<div class="mb-3">
-            <label for="pwd" class="form-label">Department</label>
-            <input type="text" class="form-control" id="department" placeholder="Enter password" name="pswd">
+        <!-- Department -->
+        <div class="mt-3">
+            <label for="add-project-form_department" class="form-label">Department</label>
+            @Html.DropDownList("add-project-form_department", Model.DepartmentSelectList, "Department", new { @class = "form-select" })
         </div>
-        <div class="mb-3">
-            <label for="pwd" class="form-label">Cedacri International Responsible User</label>
-            <input type="password" class="form-control" id="pwd" placeholder="Enter password" name="pswd">
+        <!-- Responsible user -->
+        <div class="mt-3">
+            <label for="add-project-form_responsible-user" class="form-label">Responsible user</label>
+            @Html.DropDownList("add-project-form_responsible-user", Model.UserSelectList, "Responsible User", new { @class = "form-select" })
         </div>
-        <div class="mb-3">
-            <label for="pwd" class="form-label">Cedacri Italia User</label>
-            <input type="password" class="form-control" id="pwd" placeholder="Enter password" name="pswd">
-        </div>*@
+        <!-- Responsible user italia -->
+        <div class="mt-3">
+            <label for="add-project-form_responsible-user-it" class="form-label">Responsible user italia</label>
+            @Html.DropDownList("add-project-form_responsible-user-it", Model.UserSelectList, "Responsible User Italia", new { @class = "form-select" })
+        </div>
+        <h5 class="mt-5 text-center">Sources</h5>
+        <div id="add-project-form_project-sources-container" class="mt-3"></div>
+        <div class="mt-3 row">
+            <div class="col text-center">
+                <div>
+                    <button type="button" id="add-project-form_add-project-source-btn" class="btn btn-primary text-center me-1">Add Project Source</button>
+                    <button type="button" id="add-project-form_remove-project-source-btn" class="btn btn-danger text-center" disabled>Remove Project Source</button>
+                </div>
+
+            </div>
+        </div>
     </form>  
 </div>
 <div class="modal-footer">
-    <button id="submit_form" type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="document.getElementById('add-project_form').submit()">Submit</button>
+    <button id="submit_form" type="button" class="btn btn-dark" data-bs-dismiss="modal">Submit</button>
     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
 </div>
 <script>
+
+    var projectSourceTypes = @Html.Raw(Json.Serialize(@Model.ProjectSourceTypeSelectList));
+    var projectSourceIndex = 1; 
+
+    $(document).ready(function () { addProjectSourceEntryToForm(); })
+
     $("#submit_form").click(function () {
-        $("#add-project_form").submit();
+        serializeAddProjectForm()
     });
+
+    $("#add-project_form").submit(function (event) {
+        event.preventDefault()
+    });
+
+    $("#add-project-form_add-project-source-btn").click(function () {
+        addProjectSourceEntryToForm();
+        if (projectSourceIndex > 1) {
+            $("#add-project-form_remove-project-source-btn").removeAttr('disabled');
+        } else {
+            $("#add-project-form_remove-project-source-btn").attr('disabled', 'disabled');
+        }
+    });
+
+    $("#add-project-form_remove-project-source-btn").click(function () {
+        if (projectSourceIndex < 3) { return; }
+        projectSourceIndex--;
+        $("#add-project-form_project-src-container-" + projectSourceIndex).remove();       
+        if (projectSourceIndex < 3) { $("#add-project-form_remove-project-source-btn").attr('disabled', 'disabled'); }
+    });
+
+
+    function addProjectSourceEntryToForm() {
+        var html = "";
+
+        html += '<div id="add-project-form_project-src-container-' + projectSourceIndex + '" class="mb-3 mt-3">'
+        html += '   <label for="add-project-form_project-src-*" class="form-label">Project Source ' + projectSourceIndex + '</label>'
+        html += '   <div class="row">'
+        html += '   <div class="col-8">'
+        html += '   <input type="tel" class="form-control" id="add-project-form_project-src-' + projectSourceIndex + '" placeholder="URL" name="add-project-form_project-src-' + projectSourceIndex + '">'
+        html += '   </div>'
+        html += '       <div class="col-4">'
+        html += '           <select id="add-project-form_project-src-type-' + projectSourceIndex + '" class="form-select">'
+        html += '               <option selected>Type</option>'
+        for (var projectSourceType in projectSourceTypes) {
+            html += '           <option value="' + projectSourceType.value + '">' + projectSourceType.text + '</option>'
+        }
+        html += '           </select>'
+        html += '       </div>'
+        html += '   </div>'
+        html += '</div>'
+
+        $("#add-project-form_project-sources-container").append(html);
+
+        projectSourceIndex++;
+    }
+
+    function serializeAddProjectForm() {      
+        var projectName = $("#add-project-form_project-name").val();
+        var departmentId = $("#add-project-form_department").val();
+        var responsibleUserId = $("#add-project-form_responsible-user").val();
+        var responsibleUserItaliaId = $("#add-project-form_responsible-user-itt").val() ?? null;
+
+        var formData = {
+            projectName: projectName,
+            departmentId: departmentId,
+            responsibleUserId: responsibleUserId,
+            responsibleUserItaliaId: responsibleUserItaliaId,
+            projectSources: []
+        }
+
+        for (var i = 0; i < projectSourceIndex - 1; i++) {
+            var projectSrcUrl = $("#add-project-form_project-src-" + projectSourceIndex).val() ?? null
+            if (!projectSrcUrl) { continue; }
+            var projectSrcType = $("#add-project-form_project-src-type" + projectSourceIndex).val() ?? null
+
+            var projectSource = {
+                projectSrcUrl: projectSrcUrl,
+                projectSrcType: projectSrcType
+            }
+
+            formData.projectSources.push(projectSource)
+        }
+
+        addProjectSubmitData(formData);
+    }
+
+    function addProjectSubmitData(data) {
+
+        var sendData = {
+            project: data
+        };
+        //$.post("/projects/addProject", data, function (data, status, xhr) {
+        //    console.log("success");
+        //}, "json");
+
+        $.ajax({
+            type: "POST",
+            url: "/projects/addProject",
+            data: sendData,
+            success: function () { console.log("success") },
+            dataType: "json",
+            contentType: "application/json; charset=utf-8"
+        });
+    }
 </script>
