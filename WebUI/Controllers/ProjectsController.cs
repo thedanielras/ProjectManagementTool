@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using WebUI.Common.Interfaces;
@@ -96,10 +97,7 @@ namespace WebUI.Controllers
 
             IEnumerable<SelectListItem> departmentSelectList = allDepartments.Select(x => new SelectListItem { Text = x.Name, Value = x.DepartmentId.ToString() }).ToList();
             IEnumerable<SelectListItem> userSelectList = allUsers.Select(u => new SelectListItem { Text = u.Name, Value = u.UserId.ToString() }).ToList();
-            IEnumerable<SelectListItem> projectSourceTypeSelectList = projectSourceTypes;
-
-           
-      
+            IEnumerable<SelectListItem> projectSourceTypeSelectList = projectSourceTypes;         
 
             var viewModel = new AddProjectViewModel(departmentSelectList, userSelectList, projectSourceTypeSelectList);
 
@@ -112,16 +110,19 @@ namespace WebUI.Controllers
         [HttpPost]
         public IActionResult AddProject(AddProjectDto project)
         {
+            ResponseViewModel returnModel = new ResponseViewModel(null, ResponseType.KO, "Error adding project!");
+
             if (ModelState.IsValid)
             {
-                Console.WriteLine("Ok");
-            }
-            else 
-            {
-                Console.WriteLine("Ko");
+                var projectEntity = _mapper.Map<Project>(project);
+                if (projectEntity != null)
+                {
+                    bool isSuccess = _projectRepository.AddProject(projectEntity);
+                    if (isSuccess) returnModel = new ResponseViewModel(projectEntity, ResponseType.OK);
+                }
             }
 
-            return new OkResult();
+            return Json(returnModel);
         }
     }
 }

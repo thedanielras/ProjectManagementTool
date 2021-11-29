@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WebUI.Common.Interfaces;
+using WebUI.Middleware;
 using WebUI.Services;
 
 namespace WebUI
@@ -44,6 +45,8 @@ namespace WebUI
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            //app.UseMiddleware<RequestLoggingMiddleware>();
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();

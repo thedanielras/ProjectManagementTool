@@ -29,6 +29,13 @@ namespace Persistence.Repositories
             }
         }
 
+        public bool AddProject(Project project)
+        {
+            _dbContext.Projects.Add(project);
+            var result = _dbContext.SaveChanges();
+            return result != 0;
+        }
+
         public Project GetProjectById(Guid projectId)
         {
             return _dbContext.Projects

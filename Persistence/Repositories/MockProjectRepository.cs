@@ -41,6 +41,11 @@ namespace Persistence.Repositories
             }
         };
 
+        public bool AddProject(Project project)
+        {
+            throw new NotImplementedException();
+        }
+
         public Project GetProjectById(Guid projectId)
         {
             return AllProjects.FirstOrDefault(p => p.ProjectId == projectId);

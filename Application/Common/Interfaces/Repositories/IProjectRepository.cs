@@ -9,5 +9,6 @@ namespace Application.Common.Interfaces.Repositories
     {
         IEnumerable<Project> AllProjects { get; }
         Project GetProjectById(Guid projectId);
+        bool AddProject(Project project);
     }
 }

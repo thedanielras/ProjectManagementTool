@@ -9,22 +9,22 @@ namespace WebUI.Dtos.Project.AddProject
 {
     public class AddProjectDto
     {    
-        [FromBody]
+        //[FromBody]
         [Required]
         public string Name { get; set; }
 
-        [FromBody]
+        //[FromBody]
         [Required]
         public Guid DepartmentId { get; set; }
 
-        [FromBody]
+        //[FromBody]
         [Required]      
         public Guid ResponsibleUserId { get; set; }
 
-        [FromBody]
+        //[FromBody]
         public Guid? ForeignResponsibleUserId { get; set; }
 
-        [FromBody]
+        //[FromBody]
         public IEnumerable<ProjectSourceDto> ProjectSources { get; set; }
     }
 }

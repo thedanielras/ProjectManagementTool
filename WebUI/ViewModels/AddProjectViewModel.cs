@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WebUI.Dtos.Project.AddProject;
 
 namespace WebUI.ViewModels
 {
@@ -21,5 +22,6 @@ namespace WebUI.ViewModels
         public IEnumerable<SelectListItem> DepartmentSelectList { get; private set; }
         public IEnumerable<SelectListItem> UserSelectList { get; private set; }
         public IEnumerable<SelectListItem> ProjectSourceTypeSelectList { get; private set; }
+        public AddProjectDto Project { get; set; }
     }
 }
