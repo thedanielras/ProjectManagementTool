@@ -102,7 +102,7 @@ namespace WebUI.Controllers
             var viewModel = new AddProjectViewModel(departmentSelectList, userSelectList, projectSourceTypeSelectList);
 
             ResponseViewModel returnModel;
-            string result = await _viewRenderService.RenderToStringAsync("Projects/_AddProject", viewModel);
+            string result = await _viewRenderService.RenderToStringAsync("_AddProject", viewModel);
             returnModel = new ResponseViewModel(result);
             return Json(returnModel);
         }

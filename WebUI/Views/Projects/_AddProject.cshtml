@@ -8,11 +8,11 @@
 <div class="modal-body">
 
 
-    <form action="/Project/AddProject" method="post" id="add-project-form">
+    <form asp-controller="Projects" asp-action="AddProject" method="post" id="add-project-form">
         <!-- Project name -->
         <div class="mt-3">
             <label asp-for="Project.Name" class="form-label"></label>
-            <input asp-for="Project.Name" class="form-control">
+            <input type="text" asp-for="Project.Name" class="form-control">
             <span asp-validation-for="Project.Name" class="text-danger"></span>
         </div>
         <!-- Department -->
@@ -52,10 +52,15 @@
     var projectSourceTypes = @Html.Raw(Json.Serialize(@Model.ProjectSourceTypeSelectList));
     var projectSourceIndex = 0; 
 
-    $(document).ready(function () { addProjectSourceEntryToForm(); })
-
+    $(document).ready(function () { 
+        debugger;
+        addProjectSourceEntryToForm();    
+    })
+     debugger;
     $("#submit_form").click(function () {
         debugger;
+        $("#add-project-form").submit();
+        /*
         if ($("#add-project-form").valid()) {
             serializeAddProjectForm();
         }
@@ -64,12 +69,15 @@
                 debugger;
                 $("#add-project-form").submit();
             }
-        });
+        });*/
     });
 
     $("#add-project-form").submit(function (event) {
+        debugger;
         event.preventDefault();
-        
+        if($(this).valid()) {
+            serializeAddProjectForm();
+        }        
     });
 
     $("#add-project-form_add-project-source-btn").click(function () {
@@ -93,13 +101,13 @@
         var html = "";
 
         html += '<div id="add-project-form_project-src-container-' + projectSourceIndex + '" class="mb-3 mt-3">'
-        html += '   <label for="add-project-form_project-src-' + projectSourceIndex + '" class="form-label">Project Source ' + projectSourceIndex+1 + '</label>'
+        html += '   <label for="add-project-form_project-src-' + projectSourceIndex + '" class="form-label">Project Source ' + (projectSourceIndex+1) + '</label>'
         html += '   <div class="row">'
         html += '   <div class="col-8">'
         html += '   <input type="tel" class="form-control" id="add-project-form_project-src-' + projectSourceIndex + '" placeholder="URL" name="add-project-form_project-src-' + projectSourceIndex + '">'
         html += '   </div>'
         html += '       <div class="col-4">'
-        html += '           <select id="add-project-form_project-src-type-' + projectSourceIndex + '" class="form-select">'
+        html += '           <select id="add-project-form_project-src-type-' + projectSourceIndex + '" name="add-project-form_project-src-type-' + projectSourceIndex + '" class="form-select">'
         html += '               <option selected>Type</option>'
         projectSourceTypes.forEach((projectSourceType) => {
             html += '           <option value="' + projectSourceType.value + '">' + projectSourceType.text + '</option>'

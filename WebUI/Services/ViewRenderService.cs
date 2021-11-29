@@ -22,25 +22,26 @@ namespace WebUI.Services
     {
         private readonly IRazorViewEngine _razorViewEngine;
         private readonly ITempDataProvider _tempDataProvider;
-        private readonly IServiceProvider _serviceProvider;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public ViewRenderService(IRazorViewEngine razorViewEngine,
             ITempDataProvider tempDataProvider,
-            IServiceProvider serviceProvider)
+            IHttpContextAccessor httpContextAccessor)
         {
             _razorViewEngine = razorViewEngine;
             _tempDataProvider = tempDataProvider;
-            _serviceProvider = serviceProvider;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<string> RenderToStringAsync(string viewName, object model)
         {
-            var httpContext = new DefaultHttpContext { RequestServices = _serviceProvider };
-            var actionContext = new ActionContext(httpContext, new RouteData(), new ActionDescriptor());
+            var httpContext = _httpContextAccessor.HttpContext;
+            var actionContext = new ActionContext(httpContext, httpContext.GetRouteData(), new ActionDescriptor());
 
             using (var sw = new StringWriter())
             {
                 var viewResult = _razorViewEngine.FindView(actionContext, viewName, false);
+                //var viewResult = _razorViewEngine.GetView("", viewName, false);
 
                 if (viewResult.View == null)
                 {
