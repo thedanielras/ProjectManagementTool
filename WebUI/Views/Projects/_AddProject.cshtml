@@ -1,34 +1,40 @@
 ﻿@model AddProjectViewModel
 
-
 <div class="modal-header">
     <h5 class="modal-title">Project Details</h5>
     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 </div>
 <div class="modal-body">
-
-
-    <form asp-controller="Projects" asp-action="AddProject" method="post" id="add-project-form">
+    <form asp-controller="Projects" asp-action="AddProject" method="post" id="add-project-form" >
         <!-- Project name -->
         <div class="mt-3">
             <label asp-for="Project.Name" class="form-label"></label>
-            <input type="text" asp-for="Project.Name" class="form-control">
+            <input type="text" asp-for="Project.Name" class="form-control" placeholder="Name">
             <span asp-validation-for="Project.Name" class="text-danger"></span>
         </div>
         <!-- Department -->
         <div class="mt-3">
             <label for="add-project-form_department" class="form-label">Department</label>
-            @Html.DropDownList("add-project-form_department", Model.DepartmentSelectList, "Department", new { @class = "form-select" })           
+            <select asp-for="Project.DepartmentId" asp-items="Model.DepartmentSelectList" class="form-select">
+                   <option selected>Department</option>
+            </select>               
+            <span asp-validation-for="Project.DepartmentId" class="text-danger"></span>
         </div>
         <!-- Responsible user -->
         <div class="mt-3">
             <label for="add-project-form_responsible-user" class="form-label">Responsible user</label>
-            @Html.DropDownList("add-project-form_responsible-user", Model.UserSelectList, "Responsible User", new { @class = "form-select" })
+            <select asp-for="Project.ResponsibleUserId" asp-items="Model.UserSelectList" class="form-select">
+                 <option selected>Responsible User</option>
+            </select>            
+            <span asp-validation-for="Project.ResponsibleUserId" class="text-danger"></span>
         </div>
         <!-- Responsible user italia -->
         <div class="mt-3">
             <label for="add-project-form_responsible-user-it" class="form-label">Responsible user italia</label>
-            @Html.DropDownList("add-project-form_responsible-user-it", Model.UserSelectList, "Responsible User Italia", new { @class = "form-select" })
+           <select asp-for="Project.ForeignResponsibleUserId" asp-items="Model.UserSelectList" class="form-select">
+                <option selected>Responsible User Italia</option>
+           </select>   
+           <span asp-validation-for="Project.ForeignResponsibleUserId" class="text-danger"></span>
         </div>
         <h5 class="mt-5 text-center">Sources</h5>
         <div id="add-project-form_project-sources-container" class="mt-3"></div>
@@ -38,7 +44,6 @@
                     <button type="button" id="add-project-form_add-project-source-btn" class="btn btn-primary text-center me-1">Add Project Source</button>
                     <button type="button" id="add-project-form_remove-project-source-btn" class="btn btn-danger text-center" disabled>Remove Project Source</button>
                 </div>
-
             </div>
         </div>
     </form>
@@ -48,33 +53,21 @@
     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
 </div>
 <script>
-
     var projectSourceTypes = @Html.Raw(Json.Serialize(@Model.ProjectSourceTypeSelectList));
     var projectSourceIndex = 0; 
 
     $(document).ready(function () { 
-        debugger;
-        addProjectSourceEntryToForm();    
+        //addProjectSourceEntryToForm();    
     })
-     debugger;
+
     $("#submit_form").click(function () {
-        debugger;
         $("#add-project-form").submit();
-        /*
-        if ($("#add-project-form").valid()) {
-            serializeAddProjectForm();
-        }
-        $("#add-project-form").validate({
-            submitHandler: function (form) {
-                debugger;
-                $("#add-project-form").submit();
-            }
-        });*/
     });
 
     $("#add-project-form").submit(function (event) {
-        debugger;
         event.preventDefault();
+        debugger;
+        $(this).validate({debug: true})
         if($(this).valid()) {
             serializeAddProjectForm();
         }        
@@ -104,11 +97,11 @@
         html += '   <label for="add-project-form_project-src-' + projectSourceIndex + '" class="form-label">Project Source ' + (projectSourceIndex+1) + '</label>'
         html += '   <div class="row">'
         html += '   <div class="col-8">'
-        html += '   <input type="tel" class="form-control" id="add-project-form_project-src-' + projectSourceIndex + '" placeholder="URL" name="add-project-form_project-src-' + projectSourceIndex + '">'
+        html += '   <input type="tel" class="form-control" id="add-project-form_project-src-' + projectSourceIndex + '" placeholder="URL" name="Project.ProjectSources[' + projectSourceIndex + '].SourceUrl">'
         html += '   </div>'
         html += '       <div class="col-4">'
-        html += '           <select id="add-project-form_project-src-type-' + projectSourceIndex + '" name="add-project-form_project-src-type-' + projectSourceIndex + '" class="form-select">'
-        html += '               <option selected>Type</option>'
+        html += '           <select id="add-project-form_project-src-type-' + projectSourceIndex + '" name="Project.ProjectSources[' + projectSourceIndex + '].Type" class="form-select">'
+        html += '               <option selected value="">Type</option>'
         projectSourceTypes.forEach((projectSourceType) => {
             html += '           <option value="' + projectSourceType.value + '">' + projectSourceType.text + '</option>'
         });
@@ -127,6 +120,7 @@
         var formData = $("#add-project-form").serializeArray();
 
         for (var i = 0; i < projectSourceIndex; i++) {
+            debugger;
             var projectSrcUrl = $("#add-project-form_project-src-" + i).val() ?? null
             if (!projectSrcUrl) { continue; }
             var projectSrcType = $("#add-project-form_project-src-type-" + i).val() ?? null          
@@ -142,7 +136,12 @@
             type: "POST",
             url: "/projects/addProject",
             data: data,
-            success: function () { alert("Project added sucessfully") }
+           statusCode: {
+            200: function() {
+                $("#content_modal").modal('hide');
+                $("#content_modal .modal-content").empty();                           
+            }
+           }
         });
     }
 </script>

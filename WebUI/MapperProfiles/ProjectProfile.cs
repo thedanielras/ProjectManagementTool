@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WebUI.Dtos;
+using WebUI.Dtos.Project.AddProject;
 
 namespace WebUI.MapperProfiles
 {
@@ -17,6 +18,9 @@ namespace WebUI.MapperProfiles
 			CreateMap<ProjectSource, ProjectSourceDto>();
 			CreateMap<Department, DepartmentDto>();
 			CreateMap<Project, ProjectDto>();
+			CreateMap<ProjectDto, Project>();
+			CreateMap<AddProjectDto, Project>();
+			CreateMap<ProjectSourceDto, ProjectSource>();
 		}		
 	}
 }

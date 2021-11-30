@@ -67,11 +67,14 @@
                     url: "/projects/newProjectViewModal",
                     dataType: "json",
                     success: function(data) {         
+                        debugger;
                         var newFormHTML = data.payload;
-                         var container = $("#content_modal .modal-content")[0];
+                        var container = $("#content_modal .modal-content")[0];
                         $("#content_modal .modal-content").empty().html(newFormHTML)
                         var forms = container.getElementsByTagName("form");
                         var newForm = forms[forms.length - 1];
+                         $(newForm).removeData("validator")    // Added by jQuery Validation
+                            .removeData("unobtrusiveValidation");   // Added by jQuery Unobtrusive Validation
                         $.validator.unobtrusive.parse(newForm);
                         $("#content_modal").modal('show');
                     }

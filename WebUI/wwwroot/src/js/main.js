@@ -18,20 +18,27 @@ $(document).ajaxComplete(function (event, xhr, settings) {
     let response = xhr.responseJSON;
     if (response && response.responseType)
     {
-        switch (response.responseType) {
-            case responseType.OK:
-                break;
-            case responseType.KO:
-                alert("Server error")
-                break;
-        }
-        return;
+        parseResponse(response);
     }
 });
 
 $(document).ajaxError(function (event, xhr, settings) {
-    alert("Server error");
+
+    setupAndShowErrorDialog()
 });
+
+function parseResponse(response) {
+    switch (response.responseType) {
+        case responseType.KO:
+            setupAndShowErrorDialog(response.errorMessage ?? "Generic Error!");
+            break;
+    }
+}
+
+function setupAndShowErrorDialog(message) {
+    $("#error_modal_message_body").empty().html("<p>" + (message ?? "Generic Error!") + "</p>")
+    $("#error_modal").modal('show');
+}
 
 function getCookie(cname) {
     let name = cname + "=";
