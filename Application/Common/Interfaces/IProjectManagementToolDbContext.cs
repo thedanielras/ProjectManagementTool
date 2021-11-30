@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Application.Common.Interfaces
 {
-    interface IProjectManagementToolDbContext
+    public interface IProjectManagementToolDbContext
     {
         DbSet<Project> Projects { get; set; }
     }

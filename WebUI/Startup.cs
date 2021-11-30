@@ -1,3 +1,4 @@
+using Application;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -12,7 +13,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WebUI.Common.Interfaces;
-using WebUI.Middleware;
 using WebUI.Services;
 
 namespace WebUI
@@ -30,10 +30,11 @@ namespace WebUI
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddAutoMapper(typeof(Startup));
-            services.AddControllersWithViews();
-            services.AddPersistence(_configuration);
+            //services.AddAutoMapper(typeof(Startup));
+            services.AddControllersWithViews();           
             services.AddDbContext<ProjectManagementToolDbContext>(options => options.UseSqlServer(_configuration.GetConnectionString("ProjectManagementToolConnection")));
+            services.AddPersistence(_configuration);
+            services.AddApplication(_configuration);
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<IViewRenderService, ViewRenderService>();
         }
@@ -45,8 +46,6 @@ namespace WebUI
             {
                 app.UseDeveloperExceptionPage();
             }
-
-            //app.UseMiddleware<RequestLoggingMiddleware>();
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();

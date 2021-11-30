@@ -1,6 +1,8 @@
 ﻿using Application.Common.Interfaces.Repositories;
+using Application.Projects.Queries.GetAllProjects;
 using AutoMapper;
 using Domain.Entities;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
@@ -26,17 +28,20 @@ namespace WebUI.Controllers
         private readonly IDepartmentRepository _departmentRepository;
         private readonly IMapper _mapper;
         private readonly IViewRenderService _viewRenderService;
+        private readonly IMediator _mediator;
 
         public ProjectsController(IProjectRepository projectRepository, 
                                     IUserRepository userRepository,
                                 IDepartmentRepository departmentRepository, 
-                                IMapper mapper, IViewRenderService viewRenderService)
+                                IMapper mapper, IViewRenderService viewRenderService,
+                                IMediator mediator)
         {
             _projectRepository = projectRepository;
             _userRepository = userRepository;
             _departmentRepository = departmentRepository;
             _mapper = mapper;
             _viewRenderService = viewRenderService;
+            _mediator = mediator;
         }
 
         [HttpGet]
@@ -49,11 +54,16 @@ namespace WebUI.Controllers
         }
 
         [HttpGet]
-        public IActionResult JsonList()
+        public async Task<IActionResult> ListJson([FromQuery] GetAllProjectsQuery query)
         {
             ResponseViewModel returnModel;
-            var projects = _projectRepository.AllProjects.ToList();
 
+            var projects = await _mediator.Send(query);
+
+            returnModel = new ResponseViewModel(projects);
+
+            //var projects = _projectRepository.AllProjects.ToList();
+            /*
             if (projects.Count > 0)
             {
                 var payload = new ProjectsListViewModel(_mapper.Map<IEnumerable<ProjectDto>>(projects));
@@ -62,7 +72,7 @@ namespace WebUI.Controllers
             {
                 returnModel = new ResponseViewModel(null, ResponseType.KO, "Elements not found");
             }
-
+            */
             return Json(returnModel);
         }
 
