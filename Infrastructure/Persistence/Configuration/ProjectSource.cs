@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Persistence.Configuration
+namespace Infrastructure.Persistence.Configuration
 {
     class ProjectSourceConfiguration : IEntityTypeConfiguration<ProjectSource>
     {

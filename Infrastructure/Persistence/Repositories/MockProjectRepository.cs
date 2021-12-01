@@ -6,7 +6,7 @@ using System.Text;
 using System.Linq;
 using Domain.Enums;
 
-namespace Persistence.Repositories
+namespace Infrastructure.Persistence.Repositories
 {
     public class MockProjectRepository : IProjectRepository
     {

@@ -1,14 +1,10 @@
 ﻿using Application.Common.Interfaces;
 using Domain.Entities;
+using Infrastructure.Persistence.SeedData;
 using Microsoft.EntityFrameworkCore;
-using Persistence.Configuration;
-using Persistence.SeedData;
-using System;
-using System.Collections.Generic;
 using System.Reflection;
-using System.Text;
 
-namespace Persistence
+namespace Infrastructure.Persistence
 {
     public class ProjectManagementToolDbContext : DbContext, IProjectManagementToolDbContext
     {

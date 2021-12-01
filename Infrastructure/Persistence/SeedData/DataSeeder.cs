@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Persistence.SeedData
+namespace Infrastructure.Persistence.SeedData
 {
     public static class ModelBuilderExtensions
     {

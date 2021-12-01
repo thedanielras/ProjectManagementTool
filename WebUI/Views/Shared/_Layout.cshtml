@@ -4,8 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.min.css" />
-    @*<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">*@
+    <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.min.css" /> 
     <link rel="stylesheet" href="~/src/css/main.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css" />
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.css">
@@ -19,9 +18,7 @@
                 <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
                     PM Tool
                 </a>
-                <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-                    <!-- <li><a href="#" class="nav-link px-2 text-secondary">List</a></li>  -->
-                </ul>
+                <div class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0"></div>
                 <div id="user_session" class="text-end">
                     <a asp-controller="Accounts" asp-action="SingIn" class="btn btn-outline-light me-2">Login</a>
                     <button type="button" class="btn btn-warning">Sign-up</button>
@@ -33,14 +30,13 @@
         @RenderBody()
     </div>
 
-    <partial name="~/Views/Partial/_ContentModal.cshtml" />
-    <partial name="~/Views/Partial/_ErrorModal.cshtml" />
+    <partial name="~/Views/Partial/Common/_ContentModal.cshtml" />
+    <partial name="~/Views/Partial/Common/_ErrorModal.cshtml" />
 
     <script type="text/javascript" src="~/lib/jquery/jquery.min.js"></script>
     <script type="text/javascript" src="~/lib/jquery-validate/jquery.validate.js"></script>
     <script type="text/javascript" src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
-    <script type="text/javascript" src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
-    @*<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF" crossorigin="anonymous"></script>*@
+    <script type="text/javascript" src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>  
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.js"></script>
     <script src="~/src/js/main.js"></script>
     @RenderSection("scripts", false)

@@ -1,24 +1,24 @@
 ﻿using Application.Common.Interfaces;
 using Application.Common.Interfaces.Repositories;
+using Infrastructure.Persistence;
+using Infrastructure.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Persistence.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace Persistence
+namespace Infrastructure
 {
     public static class DepedencyInjection
     {
-        public static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration) 
+        public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration) 
         {
-            services.AddDbContext<ProjectManagementToolDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("ProjectManagementToolConnection")));
+            services.AddDbContext<ProjectManagementToolDbContext>(options => 
+                                        options.UseSqlServer(configuration.GetConnectionString("ProjectManagementToolConnection")));
             services.AddScoped<IProjectManagementToolDbContext>(provider => provider.GetRequiredService<ProjectManagementToolDbContext>());
             services.AddScoped<IProjectRepository, SqlProjectRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+
             return services;
         }
     }

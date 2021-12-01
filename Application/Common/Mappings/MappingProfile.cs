@@ -11,7 +11,12 @@ namespace Application.Common.Mappings
     {
         public MappingProfile()
         {
-            CreateMap<Project, ProjectBriefDto>();     
+            CreateMap<User, UserDto>();
+            CreateMap<Department, DepartmentDto>();
+            CreateMap<Project, ProjectBriefDto>();
+
+
+
         }
 
 

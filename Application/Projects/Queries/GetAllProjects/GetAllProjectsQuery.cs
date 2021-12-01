@@ -1,4 +1,5 @@
 ﻿using Application.Common.Interfaces;
+using Application.Common.Models;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using MediatR;
@@ -12,11 +13,11 @@ using System.Threading.Tasks;
 
 namespace Application.Projects.Queries.GetAllProjects
 {
-    public  class GetAllProjectsQuery : IRequest<IEnumerable<ProjectBriefDto>>
+    public  class GetAllProjectsQuery : IRequest<Result>
     {
     }
 
-    public class GetAllProjectsQueryHandler : IRequestHandler<GetAllProjectsQuery, IEnumerable<ProjectBriefDto>>
+    public class GetAllProjectsQueryHandler : IRequestHandler<GetAllProjectsQuery, Result>
     {
         private readonly IProjectManagementToolDbContext _context;
         private readonly IMapper _mapper;
@@ -27,11 +28,19 @@ namespace Application.Projects.Queries.GetAllProjects
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<ProjectBriefDto>> Handle(GetAllProjectsQuery request, CancellationToken cancellationToken)
+        public async Task<Result> Handle(GetAllProjectsQuery request, CancellationToken cancellationToken)
         {
-            return await _context.Projects
+            var projects = await _context.Projects
                 .ProjectTo<ProjectBriefDto>(_mapper.ConfigurationProvider)
                 .ToListAsync();
+
+            if (projects != null)
+            {
+                return Result.SuccessWithJsonPayload(projects);
+            } else 
+            {
+                return Result.Error(new List<string> { "Error getting projects!" });
+            }
         }
     }
 }
