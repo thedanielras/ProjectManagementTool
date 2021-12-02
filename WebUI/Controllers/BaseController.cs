@@ -12,8 +12,8 @@ namespace WebUI.Controllers
         private IViewRenderService _viewRenderService = null!;
         private IMediator _mediator = null!;
 
-        protected ILogger<T> Mediator => _logger ??= HttpContext.RequestServices.GetRequiredService<ILogger<T>>();
+        protected ILogger<T> Logger => _logger ??= HttpContext.RequestServices.GetRequiredService<ILogger<T>>();
         protected IViewRenderService ViewRenderService => _viewRenderService ??= HttpContext.RequestServices.GetRequiredService<IViewRenderService>();
-        protected IMediator Modator => _mediator ??= HttpContext.RequestServices.GetRequiredService<IMediator>();     
+        protected IMediator Mediator => _mediator ??= HttpContext.RequestServices.GetRequiredService<IMediator>();     
     }
 }

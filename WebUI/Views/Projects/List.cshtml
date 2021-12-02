@@ -1,6 +1,4 @@
-﻿@model WebUI.ViewModels.ProjectsListViewModel
-
-@{
+﻿@{
     ViewBag.Title = "Projects";
 }
 
@@ -21,7 +19,6 @@
     <button id="btn-new-project" type="button" class="btn btn-primary mt-3">New Project</button>
 </div>
 
-
 @section scripts {
     <script>
         $(document).ready(function () {
@@ -41,37 +38,37 @@
                 }
             );
 
-            //$('#projects_table tbody').on('click', 'tr', function () {
-            //    var data = projectsTable.row(this).data();
-            //    let projectId = data.projectId;
-            //    if (projectId != null && projectId != "")
-            //    {
-            //        $.get("/projects/projectDetailViewModal", { id: projectId }, function (data, status, xhr) {
-            //            if (data && data.payload)
-            //            {
-            //                $("#content_modal .modal-content").empty().html(data.payload);
-            //                $("#content_modal").modal('show');
-            //            }
-            //        });
-            //    }
-            //});
+            $('#projects_table tbody').on('click', 'tr', function () {
+                var data = projectsTable.row(this).data();
+                let projectId = data.projectId;
+                if (projectId != null && projectId != "")
+                {
+                    $.get("/projects/detailsmodal", { projectId: projectId }, function (data, status, xhr) {
+                        if (data && data.payload)
+                        {
+                            $("#content_modal .modal-content").empty().html(data.payload);
+                            $("#content_modal").modal('show');
+                        }
+                    });
+                }
+            });
 
-            //$("#btn-new-project").click(function () {          
-            //    $.get({
-            //        url: "/projects/newProjectViewModal",
-            //        dataType: "json",
-            //        success: function(data) {
-            //            debugger;
-            //            var newFormHTML = data.payload;
-            //            var container = $("#content_modal .modal-content")[0];
-            //            $("#content_modal .modal-content").empty().html(newFormHTML)
-            //            var forms = container.getElementsByTagName("form");
-            //            var newForm = forms[forms.length - 1];
-            //            $.validator.unobtrusive.parse(newForm);
-            //            $("#content_modal").modal('show');
-            //        }
-            //    });
-            //});
+            $("#btn-new-project").click(function () {          
+                $.get({
+                    url: "/projects/creationmodal",
+                    dataType: "json",
+                    success: function(data) {
+                        debugger;
+                        var newFormHTML = data.payload;
+                        var container = $("#content_modal .modal-content")[0];
+                        $("#content_modal .modal-content").empty().html(newFormHTML)
+                        var forms = container.getElementsByTagName("form");
+                        var newForm = forms[forms.length - 1];
+                        $.validator.unobtrusive.parse(newForm);
+                        $("#content_modal").modal('show');
+                    }
+                });
+            });
         });
     </script>
 }

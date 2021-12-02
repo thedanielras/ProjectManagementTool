@@ -7,7 +7,7 @@ namespace Application.Common.Models
 {
     public enum ResultPayloadType : int
     { 
-        Null = 0,
+        Empty = 0,
         Json = 1,
         Html = 2
     }
@@ -17,7 +17,7 @@ namespace Application.Common.Models
                 bool succeded,
                 IEnumerable<String> errors,
                 object payload,
-                ResultPayloadType resultPayloadType = ResultPayloadType.Null
+                ResultPayloadType resultPayloadType = ResultPayloadType.Empty
             )
         {
             Succeded = succeded;
@@ -49,7 +49,7 @@ namespace Application.Common.Models
 
         public static Result Error(IEnumerable<String> errors)
         {
-            return new Result(false, errors, null, ResultPayloadType.Null);
+            return new Result(false, errors, null, ResultPayloadType.Empty);
         }
     }
 }

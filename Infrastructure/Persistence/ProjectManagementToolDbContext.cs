@@ -3,6 +3,8 @@ using Domain.Entities;
 using Infrastructure.Persistence.SeedData;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Infrastructure.Persistence
 {
@@ -18,9 +20,15 @@ namespace Infrastructure.Persistence
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
             modelBuilder.Seed();
         }
-
+                
         public DbSet<Project> Projects { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Department> Departments { get; set; }
+
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
+        {
+            return await base.SaveChangesAsync(cancellationToken);
+        }
+
     }
 }

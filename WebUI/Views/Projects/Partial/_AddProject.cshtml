@@ -1,4 +1,5 @@
-﻿@model AddProjectViewModel
+﻿@using WebUI.ViewModels.Project.Create
+@model CreateProjectViewModel
 
 <div class="modal-header">
     <h5 class="modal-title">Project Details</h5>
@@ -119,15 +120,14 @@
 
         var formData = $("#add-project-form").serializeArray();
 
-        for (var i = 0; i < projectSourceIndex; i++) {
-            debugger;
-            var projectSrcUrl = $("#add-project-form_project-src-" + i).val() ?? null
-            if (!projectSrcUrl) { continue; }
-            var projectSrcType = $("#add-project-form_project-src-type-" + i).val() ?? null          
-
-            formData.projectSources.push({ name: "projectSources[" + i + "].sourceUrl", value: projectSrcUrl })
-            formData.projectSources.push({ name: "projectSources[" + i + "].type", value: projectSrcType })
-        }
+        //for (var i = 0; i < projectSourceIndex; i++) {
+        //    var projectSrcUrl = $("#add-project-form_project-src-" + i).val() ?? null
+        //    if (!projectSrcUrl) { continue; }
+        //    var projectSrcType = $("#add-project-form_project-src-type-" + i).val() ?? null          
+        //    debugger;
+        //    formData.projectSources.push({ name: "projectSources[" + i + "].sourceUrl", value: projectSrcUrl })
+        //    formData.projectSources.push({ name: "projectSources[" + i + "].type", value: projectSrcType })
+        //}
         addProjectSubmitData(formData);
     }
 

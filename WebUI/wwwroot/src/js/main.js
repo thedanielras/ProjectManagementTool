@@ -1,9 +1,11 @@
-﻿const responseType =
+﻿const resultPayloadType =
 {
-    OK: 0,
-    KO: 1
+    empty: 0,
+    json: 1,
+    html: 2
 }
 
+/* user is saved to cookies upon login, TODO:refactor */
 $(document).ready(function ()
 {
     let username = getCookie("username");
