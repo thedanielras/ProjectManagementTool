@@ -5,6 +5,27 @@
     html: 2
 }
 
+class Result {
+    constructor(succeded, payload, errors) {
+        this.succeded = succeded || false;
+        this.payload = payload || {};
+        this.errors = errors || []             
+    }
+
+    processErrors() {
+        if (this.succeded) return;
+        if (this.errors && Array.isArray(this.errors) && this.errors.length > 0) {
+            var htmlErrors = "";
+            this.errors.forEach(error => {
+                htmlErrors += '<ul class="list-group">'
+                htmlErrors += '<li class="list-group-item list-group-item-dange">' + error + '</li>'
+                htmlErrors += '<ul>'
+            });
+            setupAndShowErrorDialog(htmlErrors);
+        }
+    }
+}
+
 /* user is saved to cookies upon login, TODO:refactor */
 $(document).ready(function ()
 {
@@ -18,27 +39,21 @@ $(document).ready(function ()
 
 $(document).ajaxComplete(function (event, xhr, settings) {
     let response = xhr.responseJSON;
-    if (response && response.responseType)
+    if (response && response.hasOwnProperty("succeded"))
     {
-        parseResponse(response);
+        var result = new Result(response.succeded, response.payload, response.errors)
+        if (!result.succeded) {
+            result.processErrors();
+        }
     }
 });
 
 $(document).ajaxError(function (event, xhr, settings) {
-
-    setupAndShowErrorDialog()
+    showErrorAlertWithMessage("Generic Errror! Call support.")
 });
 
-function parseResponse(response) {
-    switch (response.responseType) {
-        case responseType.KO:
-            setupAndShowErrorDialog(response.errorMessage ?? "Generic Error!");
-            break;
-    }
-}
-
-function setupAndShowErrorDialog(message) {
-    $("#error_modal_message_body").empty().html("<p>" + (message ?? "Generic Error!") + "</p>")
+function setupAndShowErrorDialog(messagesHtml) {
+    $("#error_modal_message_body").empty().html("<p>" + (messagesHtml ?? "Generic Error!") + "</p>")
     $("#error_modal").modal('show');
 }
 
@@ -56,4 +71,22 @@ function getCookie(cname) {
         }
     }
     return "";
+}
+
+function refreshValidationForFormWithSelector(selector) {
+    if (!$(selector)[0]) return;
+    var form = $(selector)
+        .removeData("validator") 
+        .removeData("unobtrusiveValidation");
+    $.validator.unobtrusive.parse(form);
+}
+
+function showSuccessAlertWithMessage(message) {
+    $("#global-success-alert-message").empty().text(message);
+    $("#global-success-alert").show();
+}
+
+function showErrorAlertWithMessage(message) {
+    $("#global-error-alert-message").empty().text(message);
+    $("#global-error-alert").show();
 }

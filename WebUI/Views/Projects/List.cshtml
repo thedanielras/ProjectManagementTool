@@ -29,12 +29,12 @@
                         dataSrc: "payload",
                     },
                     columns:
-                        [
-                            { data: "name" },
-                            { data: "department.name" },
-                            { data: "responsibleUser.name" },
-                            { data: "responsibleUser.name" }
-                        ]
+                    [
+                        { data: "name" },
+                        { data: "department.name" },
+                        { data: "responsibleUser.name" },
+                        { data: "responsibleUser.name" }
+                    ]
                 }
             );
 
@@ -58,13 +58,13 @@
                     url: "/projects/creationmodal",
                     dataType: "json",
                     success: function(data) {
-                        debugger;
+                        //debugger;
                         var newFormHTML = data.payload;
                         var container = $("#content_modal .modal-content")[0];
                         $("#content_modal .modal-content").empty().html(newFormHTML)
                         var forms = container.getElementsByTagName("form");
                         var newForm = forms[forms.length - 1];
-                        $.validator.unobtrusive.parse(newForm);
+                        //$.validator.unobtrusive.parse(newForm);
                         $("#content_modal").modal('show');
                     }
                 });

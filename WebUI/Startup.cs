@@ -9,6 +9,8 @@ using Microsoft.Extensions.Hosting;
 using WebUI.Common.Interfaces;
 using WebUI.Services;
 using Infrastructure;
+using FluentValidation.AspNetCore;
+using WebUI.Filters;
 
 namespace WebUI
 {
@@ -26,7 +28,7 @@ namespace WebUI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSwaggerGen();
-            services.AddControllersWithViews();                     
+            services.AddControllersWithViews(options => options.Filters.Add<ExceptionFilter>()).AddFluentValidation();                     
             services.AddInfrastructure(_configuration);
             services.AddApplication(_configuration);
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();

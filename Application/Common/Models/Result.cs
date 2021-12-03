@@ -28,7 +28,6 @@ namespace Application.Common.Models
 
         public ResultPayloadType ResultPayloadType { get; set; }
         public object Payload { get; set; }
-        public int MyProperty { get; set; }
         public bool Succeded { get; set; }
         public string[] Errors { get; set; }
 

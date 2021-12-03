@@ -19,7 +19,7 @@ namespace Application.Projects.Commands.Create
         public string Name { get; set; }
         public Guid DepartmentId { get; set; }
         public Guid ResponsibleUserId { get; set; }
-        public Guid ForeignResponsibleUserId { get; set; }
+        public Guid? ForeignResponsibleUserId { get; set; }
         public IEnumerable<ProjectSourceDto> ProjectSources { get; set; }
         public class ProjectSourceDto
         {

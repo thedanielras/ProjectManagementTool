@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.min.css" /> 
     <link rel="stylesheet" href="~/src/css/main.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css" />
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs5/jq-3.6.0/dt-1.11.3/b-2.1.0/sl-1.3.3/datatables.min.css"/>
     @RenderSection("Styles", false)
     <title>@ViewBag.Title</title>
 </head>
@@ -32,12 +32,13 @@
 
     <partial name="~/Views/Partial/Common/_ContentModal.cshtml" />
     <partial name="~/Views/Partial/Common/_ErrorModal.cshtml" />
+    <partial name="~/Views/Partial/Common/_AlertContainer.cshtml" />
 
     <script type="text/javascript" src="~/lib/jquery/jquery.min.js"></script>
     <script type="text/javascript" src="~/lib/jquery-validate/jquery.validate.js"></script>
     <script type="text/javascript" src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
     <script type="text/javascript" src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>  
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/bs5/jq-3.6.0/dt-1.11.3/b-2.1.0/sl-1.3.3/datatables.min.js"></script>
     <script src="~/src/js/main.js"></script>
     @RenderSection("scripts", false)
 </body>

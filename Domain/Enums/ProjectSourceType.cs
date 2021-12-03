@@ -6,8 +6,8 @@ namespace Domain.Enums
 {
     public enum ProjectSourceType
     {
-        Github = 0,
-        Gitlab = 1,
-        Other = 2
+        Github = 1,
+        Gitlab = 2,
+        Other = 3
     }
 }
