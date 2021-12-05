@@ -11,6 +11,7 @@ using WebUI.Services;
 using Infrastructure;
 using FluentValidation.AspNetCore;
 using WebUI.Filters;
+using Serilog;
 
 namespace WebUI
 {
@@ -47,9 +48,10 @@ namespace WebUI
                     options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
                     options.RoutePrefix = "api";
                 });
-            }
+            }            
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseSerilogRequestLogging();
             app.UseRouting();
             app.UseEndpoints(endpoints =>
             {
