@@ -8,6 +8,8 @@ namespace Application.Common.Exceptions
 {
     public class ValidationException : Exception
     {
+        public ValidationException(string message) : base(message) { }
+        
         public ValidationException()
         : base("One or more validation failures have occurred.")
         {

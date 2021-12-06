@@ -7,11 +7,12 @@ using Application.Projects.Commands.Edit;
 using Application.Projects.Queries.GetAllProjects;
 using Application.Projects.Queries.GetProjectDetails;
 using Application.Projects.Queries.GetProjectEditData;
-using Application.Users.Queries.GetAllUsersQuery;
+using Application.Users.Queries.GetAll;
 using AutoMapper;
 using Domain.Entities;
 using Domain.Enums;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
@@ -35,19 +36,21 @@ namespace WebUI.Controllers
 {
     public class ProjectsController : BaseController<ProjectsController>
     {
-
+        [Authorize]
         [HttpGet]
         public IActionResult Index() /*Entry point*/
         {
             return new RedirectToActionResult("List", "Projects", new { }, true);
         }
 
+        [Authorize]
         [HttpGet]
         public IActionResult List()
         {
             return View();
         }
 
+        [Authorize]
         [ApiExplorerSettings(IgnoreApi = true)]
         [HttpGet]
         public async Task<IActionResult> DetailsModal(Guid projectId)
@@ -81,7 +84,8 @@ namespace WebUI.Controllers
             var result = Result.SuccessWithHtmlPayload(view);
             return Json(result);
         }
-        
+
+        [Authorize]
         [ApiExplorerSettings(IgnoreApi = true)]
         [HttpGet]
         public async Task<IActionResult> EditModal(Guid projectId)
@@ -116,7 +120,7 @@ namespace WebUI.Controllers
             return Json(result);
         }
 
-
+        [Authorize]
         [ApiExplorerSettings(IgnoreApi = true)]
         [HttpGet]
         public async Task<IActionResult> CreationModal()
@@ -135,7 +139,8 @@ namespace WebUI.Controllers
             var result = Result.SuccessWithHtmlPayload(view);
             return Json(result);
         }
-        
+
+        [Authorize]
         [ApiExplorerSettings(IgnoreApi = true)]
         [HttpPost]
         public async Task<IActionResult> AddProject([FromForm][Bind(Prefix = "Project")] CreateProjectCommand command)
@@ -144,6 +149,7 @@ namespace WebUI.Controllers
             return Json(result);
         }
 
+        [Authorize]
         [ApiExplorerSettings(IgnoreApi = true)]
         [HttpPost]
         public async Task<IActionResult> EditProject([FromForm][Bind(Prefix = "Project")] EditProjectCommand command)

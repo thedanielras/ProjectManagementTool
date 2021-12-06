@@ -1,14 +1,19 @@
 ﻿using Application.Common.Interfaces.Repositories;
+using Application.Users.Commands.Create;
+using Application.Users.Queries.GetByNameAndPassword;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using WebUI.ViewModels;
 
 namespace WebUI.Controllers
 {
-    public class AccountsController : Controller
+    public class AccountsController : BaseController<AccountsController>
     {
         private readonly IUserRepository _userRepository;
 
@@ -20,33 +25,61 @@ namespace WebUI.Controllers
         [HttpGet]
         public IActionResult SingIn() 
         {
-
-
             return View();
         }
 
         [HttpPost]
-        public IActionResult SingIn(string userName, string password) 
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SingIn([FromForm] GetUserByNameAndPasswordQuery command) 
         {
-            var loginSuccessful = true;
-            var errorMessage = "User not found!";
+            var user = await Mediator.Send(command);
 
-            var user = _userRepository.AllUsers.Where(u => u.Name == userName && u.Password == password).FirstOrDefault();
-            if (user == null) 
+            if (user != null)
             {
-                loginSuccessful = false;
+                await Authenticate(command.UserName);
+                return RedirectToAction("List", "Projects");
+            }         
+            
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult Register()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Register([FromForm] CreateUserCommand command)
+        { 
+            var result = await Mediator.Send(command);
+
+            if (result.Succeded)
+            {
+                await Authenticate(command.UserName);
+                return RedirectToAction("List", "Projects");
             }
 
-            if (loginSuccessful)
+            return View();
+        }
+
+        private async Task Authenticate(string userName)
+        {
+            var claims = new List<Claim>
             {
-                Response.Cookies.Append("username", user.Name);
-                Response.Cookies.Append("password", user.Password);
-                return new RedirectToActionResult("List", "Projects", new { });
-            } else 
-            {
-                ViewBag.ErrorMessage = errorMessage;
-                return View();
-            }           
+                new Claim(ClaimsIdentity.DefaultNameClaimType, userName)
+            };
+        
+            ClaimsIdentity id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
+      
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));
+        }
+
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction("Login", "Account");
         }
     }
 }

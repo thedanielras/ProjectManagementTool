@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Application.Users.Queries.GetAllUsersQuery
+namespace Application.Users.Queries.GetAllQuery
 {
     public class UserDto : IMapFrom<User>
     {

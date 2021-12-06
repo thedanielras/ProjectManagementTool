@@ -12,6 +12,7 @@ using Infrastructure;
 using FluentValidation.AspNetCore;
 using WebUI.Filters;
 using Serilog;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace WebUI
 {
@@ -28,6 +29,11 @@ namespace WebUI
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+               .AddCookie(options => {
+                   options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Accounts/SingIn");
+               });
+
             services.AddSwaggerGen();
             services.AddControllersWithViews(options => options.Filters.Add<ExceptionFilter>()).AddFluentValidation();                     
             services.AddInfrastructure(_configuration);
@@ -53,6 +59,8 @@ namespace WebUI
             app.UseStaticFiles();
             app.UseSerilogRequestLogging();
             app.UseRouting();
+            app.UseAuthentication();
+            app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

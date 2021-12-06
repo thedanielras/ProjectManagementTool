@@ -1,4 +1,5 @@
 ﻿using Application.Common.Interfaces;
+using Application.Users.Queries.GetAllQuery;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using MediatR;
@@ -9,7 +10,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Users.Queries.GetAllUsersQuery
+namespace Application.Users.Queries.GetAll
 {
     public class GetAllUsersQuery: IRequest<IEnumerable<UserDto>>
     {

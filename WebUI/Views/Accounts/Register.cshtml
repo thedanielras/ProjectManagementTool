@@ -1,4 +1,4 @@
-﻿@model Application.Users.Queries.GetByNameAndPassword.GetUserByNameAndPasswordQuery
+﻿@model Application.Users.Commands.Create.CreateUserCommand
 @section Styles {
     <link href="@Url.Content("~/src/css/loginPage.css")" rel="stylesheet" type="text/css" />
 }
@@ -16,7 +16,7 @@
 
             <div class="col-lg-12 login-form">
                 <div class="col-lg-12 login-form">
-                    <form asp-controller="Accounts" asp-action="SingIn" method="post" asp-antiforgery="true">
+                    <form asp-controller="Accounts" asp-action="Register" method="post" asp-antiforgery="true">
                         <div class="form-group">
                             <label asp-for="UserName" class="form-control-label"></label>
                             <input type="text" asp-for="UserName" class="form-control">
@@ -25,13 +25,14 @@
                             <label asp-for="Password" class="form-control-label"></label>
                             <input type="text" asp-for="Password" class="form-control">
                         </div>
+                        <div class="form-group">
+                            <label asp-for="RepeatPassword" class="form-control-label"></label>
+                            <input type="text" asp-for="RepeatPassword" class="form-control">
+                        </div>
 
-                        <div class="col-lg-12 loginbttm row">
-                            <div class="col-6 login-btm login-button">
-                                <button type="submit" class="btn btn-outline-primary">SingIn</button>
-                            </div>
-                            <div class="col-6 login-btm login-button">
-                                <button class="btn btn-outline-primary"><a asp-action="Register" asp-controller="Accounts" style="text-decoration:none;">Register</a></button>
+                        <div class="col-lg-12 loginbttm">
+                            <div class="col-lg-12 login-btm login-button">
+                                <button type="submit" class="btn btn-outline-primary">Submit</button>
                             </div>
                             <div class="col-lg-12 login-btm login-text">
                                 @if (@ViewBag.ErrorMessage != null)
@@ -47,6 +48,3 @@
         </div>
     </div>
 </div>
-
-
-
