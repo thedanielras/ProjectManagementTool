@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 
 <html lang="en">
 <head>
@@ -21,8 +21,8 @@
                 </a>
                 <div class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0"></div>
                 <div id="user_session" class="text-end">
-                    <span><b>@Context.User.Identity.Name</b></span>
-                    <a asp-controller="Accounts" asp-action="Logout" class="btn btn-outline-light me-2">Logout</a>             
+                    <a asp-controller="Accounts" asp-action="SingIn" class="btn btn-outline-light me-2">Login</a>
+                    <a asp-controller="Accounts" asp-action="Register" class="btn btn-warning">SingUp</a>
                 </div>
             </div>
         </div>

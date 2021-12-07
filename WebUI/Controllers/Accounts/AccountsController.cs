@@ -61,7 +61,8 @@ namespace WebUI.Controllers
                 return RedirectToAction("List", "Projects");
             }
 
-            return View();
+            //ViewBag.Errors = result.Errors?.ToList();
+            return Json(result);
         }
 
         private async Task Authenticate(string userName)
@@ -79,7 +80,7 @@ namespace WebUI.Controllers
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return RedirectToAction("Login", "Account");
+            return RedirectToAction("SingIn", "Accounts");
         }
     }
 }

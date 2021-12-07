@@ -26,17 +26,6 @@ class Result {
     }
 }
 
-/* user is saved to cookies upon login, TODO:refactor */
-$(document).ready(function ()
-{
-    let username = getCookie("username");
-    let password = getCookie("password");
-    if (username != "" && password != "")
-    {
-        $("#user_session").html('<span class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">' + username + '</span>')
-    }
-});
-
 $(document).ajaxComplete(function (event, xhr, settings) {
     let response = xhr.responseJSON;
     if (response && response.hasOwnProperty("succeded"))
@@ -46,10 +35,6 @@ $(document).ajaxComplete(function (event, xhr, settings) {
             result.processErrors();
         }
     }
-});
-
-$(document).ajaxError(function (event, xhr, settings) {
-    showErrorAlertWithMessage("Generic Errror! Call support.")
 });
 
 function setupAndShowErrorDialog(messagesHtml) {

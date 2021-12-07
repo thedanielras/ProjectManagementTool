@@ -135,14 +135,14 @@
             url: "/projects/addProject",
             data: data,
             statusCode: {
-            200: function(data) {
-                if (!data || !data.succeded) { return; } 
-                $("#content_modal").modal('hide');
-                $("#content_modal .modal-content").empty();    
-                showSuccessAlertWithMessage("Project added with success");
-                var projectsTable = $('#projects_table').DataTable();
-                projectsTable.ajax.reload();
-            }
+                200: function(data) {
+                    if (!data || !data.succeded) { return; } 
+                    $("#content_modal").modal('hide');
+                    $("#content_modal .modal-content").empty();    
+                    showSuccessAlertWithMessage("Project added with success");
+                    var projectsTable = $('#projects_table').DataTable();
+                    projectsTable.ajax.reload();
+                }
             }
         });
     }

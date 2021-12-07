@@ -45,7 +45,6 @@ namespace WebUI.Filters
             var errors = exception.Errors.Values.SelectMany(x => x).ToList();
             context.Result = new BadRequestObjectResult(Result.Error(errors));
             context.ExceptionHandled = true;
-
         }
         
         private void HandleNotFoundException(ExceptionContext context)
