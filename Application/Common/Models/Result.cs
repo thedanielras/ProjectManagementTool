@@ -30,6 +30,8 @@ namespace Application.Common.Models
         public object Payload { get; set; }
         public bool Succeded { get; set; }
         public string[] Errors { get; set; }
+        public bool IsRedirect { get; set; }
+        public string RedirectAddress { get; set; }
 
         public static Result Success()
         {

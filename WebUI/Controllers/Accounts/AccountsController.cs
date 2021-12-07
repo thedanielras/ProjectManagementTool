@@ -58,10 +58,12 @@ namespace WebUI.Controllers
             if (result.Succeded)
             {
                 await Authenticate(command.UserName);
-                return RedirectToAction("List", "Projects");
+                result.IsRedirect = true;
+                result.RedirectAddress = this.Url.Action("List", "Projects");
+                return Json(result);
             }
 
-            //ViewBag.Errors = result.Errors?.ToList();
+          
             return Json(result);
         }
 

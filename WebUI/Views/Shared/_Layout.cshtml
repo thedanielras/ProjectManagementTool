@@ -27,8 +27,9 @@
             </div>
         </div>
     </header>
-    <div class="mt-4">
+    <div class="mt-4" style="position: relative;">
         @RenderBody()
+        <partial name="~/Views/Partial/Common/_ToastContainer.cshtml" />
     </div>
 
     <partial name="~/Views/Partial/Common/_ContentModal.cshtml" />

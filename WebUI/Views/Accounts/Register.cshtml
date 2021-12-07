@@ -31,16 +31,8 @@
                         </div>
 
                         <div class="col-lg-12 loginbttm">
-                            <div class="col-lg-12 login-btm login-button">
+                            <div class="col-lg-12 login-btm login-button text-center">
                                 <button id="account-registration_submit" type="submit" class="btn btn-outline-primary">Submit</button>
-                            </div>
-                            <div class="col-lg-12 login-btm login-text">
-                                @if (@ViewBag.Errors != null)
-                                {
-                                    @foreach(string errorMessage in ViewBag.Errors) {
-                                        <span style="color: red">@ViewBag.ErrorMessage</span>
-                                    }                                   
-                                }
                             </div>
                         </div>
                     </form>
@@ -62,8 +54,10 @@
                     url: "/accounts/register",
                     data: formData               
                 }).done(function(data) {
-                    debugger;
-                    window.location.href = data.redirect;
+                    console.log(data);
+                    if (data && data.isRedirect && data.redirectAddress) {
+                        window.location = data.redirectAddress;
+                    }
                 });
             }        
         });

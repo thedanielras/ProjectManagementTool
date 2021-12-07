@@ -16,11 +16,18 @@ class Result {
         if (this.succeded) return;
         if (this.errors && Array.isArray(this.errors) && this.errors.length > 0) {
             var htmlErrors = "";
-            this.errors.forEach(error => {
-                htmlErrors += '<ul class="list-group">'
-                htmlErrors += '<li class="list-group-item list-group-item-dange">' + error + '</li>'
-                htmlErrors += '<ul>'
-            });
+
+            for (var i = 0; i < this.errors.length; i++) {
+                var error = this.errors[i];
+                htmlErrors += "<p class='mb-0'>" + error + "</p>";
+            }
+
+            //this.errors.forEach(error => {
+            //    htmlErrors += '<ul class="list-group">'
+            //    htmlErrors += '<li class="list-group-item list-group-item-dange">' + error + '</li>'
+            //    htmlErrors += '<ul>'
+            //    htmlErrors += error + "\n"
+            //});
             setupAndShowErrorDialog(htmlErrors);
         }
     }
@@ -38,8 +45,11 @@ $(document).ajaxComplete(function (event, xhr, settings) {
 });
 
 function setupAndShowErrorDialog(messagesHtml) {
-    $("#error_modal_message_body").empty().html("<p>" + (messagesHtml ?? "Generic Error!") + "</p>")
-    $("#error_modal").modal('show');
+    $("#error-toast-body").empty().html(messagesHtml ?? "Generic Error!");
+    $("#error-toast").toast('show');
+
+    //$("#error_modal_message_body").empty().html("<p>" + (messagesHtml ?? "Generic Error!") + "</p>")
+    //$("#error_modal").modal('show');
 }
 
 function getCookie(cname) {
@@ -71,7 +81,7 @@ function showSuccessAlertWithMessage(message) {
     $("#global-success-alert").show();
 }
 
-function showErrorAlertWithMessage(message) {
+function showErrorAlertWithMessage(message) {  
     $("#global-error-alert-message").empty().text(message);
     $("#global-error-alert").show();
 }
