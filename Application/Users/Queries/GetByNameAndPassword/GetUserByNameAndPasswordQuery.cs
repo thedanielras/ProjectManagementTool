@@ -30,7 +30,9 @@ namespace Application.Users.Queries.GetByNameAndPassword
 
         public async Task<User> Handle(GetUserByNameAndPasswordQuery request, CancellationToken cancellationToken)
         {
-            return await _context.Users.FirstOrDefaultAsync(u => u.Name == request.UserName && u.Password == request.Password);
+            return await _context.Users
+                .Include(u => u.Role)
+                .FirstOrDefaultAsync(u => u.Name == request.UserName && u.Password == request.Password);
         }
     }
 }

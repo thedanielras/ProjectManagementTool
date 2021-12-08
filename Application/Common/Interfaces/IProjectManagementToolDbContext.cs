@@ -12,6 +12,7 @@ namespace Application.Common.Interfaces
     {
         public DbSet<Project> Projects { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<Role> UserRoles { get; set; }
         public DbSet<Department> Departments { get; set; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
