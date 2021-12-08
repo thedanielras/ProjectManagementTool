@@ -60,12 +60,12 @@
     var projectSources = @Html.Raw(Json.Serialize(@Model.Project.ProjectSources));
     var projectSourceIndex = 0; 
    
-
     $(document).ready(function () {   
         var projectSourcesOrEmpty = projectSources ?? []
         projectSourcesOrEmpty.forEach( (projectSource) => { 
             addProjectSourceEntryToForm(projectSource);        
         });
+        App.refreshValidationForFormWithSelector("#add-project-form");
     })
 
     $("#submit_form").click(function () {
@@ -74,7 +74,7 @@
 
     $("#add-project-form").submit(function (event) {
         event.preventDefault();
-        $(this).validate({ debug: true })
+        $(this).validate()
         if($(this).valid()) {
             serializeAddProjectForm();
         }        
@@ -95,7 +95,6 @@
         $("#add-project-form_project-src-container-" + projectSourceIndex).remove();       
         if (projectSourceIndex < 2) { $("#add-project-form_remove-project-source-btn").attr('disabled', 'disabled'); }
     });
-
 
     function addProjectSourceEntryToForm(projectSource) {
         var html = "";
@@ -142,7 +141,7 @@
         }
 
         projectSourceIndex++;
-        refreshValidationForFormWithSelector("#add-project-form");
+        App.refreshValidationForFormWithSelector("#add-project-form");
     }
 
     function serializeAddProjectForm() {     
@@ -153,18 +152,15 @@
     function addProjectSubmitData(data) {       
         $.ajax({
             type: "POST",
-            url: "/projects/editProject",
-            data: data,
-            statusCode: {
-            200: function(data) {
-                if (!data || !data.succeded) { return; } 
-                $("#content_modal").modal('hide');
-                $("#content_modal .modal-content").empty();    
-                showSuccessAlertWithMessage("Project edited with success");
-                var projectsTable = $('#projects_table').DataTable();
-                projectsTable.ajax.reload();
-            }
-            }
+            url: "/projects/edit",
+            data: data
+        }).done(function(data) {
+            if (!data || !data.succeded) { return; } 
+            let projectName = (data.payload && data.payload.name) ? data.payload.name : "";
+            App.flushContentModal();
+            App.toaster.showSingle(ToastType.success, "Project <b>"+projectName+"</b> edited with success.");  
+            var projectsTable = $('#projects_table').DataTable();
+            projectsTable.ajax.reload();
         });
     }
 </script>

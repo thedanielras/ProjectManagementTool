@@ -1,5 +1,7 @@
-﻿using Application.Common.Interfaces;
+﻿using Application.Common.Exceptions;
+using Application.Common.Interfaces;
 using Application.Common.Models;
+using Application.Projects.Queries.CommonDtos;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using MediatR;
@@ -31,16 +33,31 @@ namespace Application.Projects.Queries.GetAllProjects
         public async Task<Result> Handle(GetAllProjectsQuery request, CancellationToken cancellationToken)
         {
             var projects = await _context.Projects
-                .ProjectTo<ProjectBriefDto>(_mapper.ConfigurationProvider)
-                .ToListAsync();
+            .Include(p => p.ResponsibleUser)
+            .Include(p => p.Department)
+            .ToListAsync();
 
-            if (projects != null)
+            if (projects == null)
             {
-                return Result.SuccessWithJsonPayload(projects);
-            } else 
-            {
-                return Result.Error(new List<string> { "Error getting projects!" });
+                throw new NotFoundException("Something went wrong");
             }
+            
+            var projectDtoList = new List<ProjectBriefDto>();
+            foreach(var project in projects)
+            {
+                var projectDto = _mapper.Map<ProjectBriefDto>(project);
+                if(project.ForeignResponsibleUserId != null)
+                {
+                    var foreignResponsibleUser = await _context.Users.FirstOrDefaultAsync(u => u.UserId == project.ForeignResponsibleUserId);
+                    if (foreignResponsibleUser != null)
+                    {
+                        projectDto.ForeignResponsibleUser = _mapper.Map<UserBriefDto>(foreignResponsibleUser);
+                    }                  
+                }
+                projectDtoList.Add(projectDto);
+            }
+
+            return Result.SuccessWithJsonPayload(projectDtoList);
         }
     }
 }

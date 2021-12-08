@@ -9,8 +9,8 @@
             <tr>
                 <th>Project name</th>
                 <th>Department</th>
-                <th>Cedacri International responsible user</th>
-                <th>Cedacri Italia responsible user</th>
+                <th>Internal responsible</th>
+                <th>Foreign responsible</th>
             </tr>
         </thead>
         <tbody>
@@ -33,81 +33,85 @@
                         { data: "name" },
                         { data: "department.name" },
                         { data: "responsibleUser.name" },
-                        { data: "responsibleUser.name" }
+                        { data: function(row) {
+                            if(row.foreignResponsibleUser && row.foreignResponsibleUser.name)
+                            {
+                                return row.foreignResponsibleUser.name;
+                            }
+                            return "-";
+                        }}
                     ]
                 }
             );
 
-                $.contextMenu({
-                    selector: '#projects_table tbody tr',
-                    items: {
-                        details: {
-                            name: "Details",
-                            callback: function(key, opt){
-                                var row = opt.$trigger[0]
-                                var data = projectsTable.row(row).data();
-                                let projectId = data.projectId;
-                                if (projectId != null && projectId != "")
-                                {
-                                    $.get("/projects/detailsmodal", { projectId: projectId }, function (data, status, xhr) {
-                                        if (data && data.payload)
-                                        {
-                                            $("#content_modal .modal-content").empty().html(data.payload);
-                                            $("#content_modal").modal('show');
-                                        }
-                                    });
-                                }
+            $.contextMenu({
+                selector: '#projects_table tbody tr',
+                items: {
+                    details: {
+                        name: "Details",
+                        callback: function(key, opt) {
+                            var row = opt.$trigger[0]
+                            var data = projectsTable.row(row).data();
+                            let projectId = data.projectId;
+                            if (projectId != null && projectId != "")
+                            {
+                                $.get("/projects/detailsmodal", { projectId: projectId }, function (data, status, xhr) {
+                                    if (data && data.payload)
+                                    {
+                                        $("#content_modal .modal-content").empty().html(data.payload);
+                                        $("#content_modal").modal('show');
+                                    }
+                                });
                             }
-                        },
-                        edit: {
-                         name: "Modify",
-                            callback: function(key, opt){
-                                var row = opt.$trigger[0]
-                                var data = projectsTable.row(row).data();
-                                let projectId = data.projectId;
-                                if (projectId != null && projectId != "")
-                                {
-                                    $.get("/projects/editmodal", { projectId: projectId }, function (data, status, xhr) {
-                                        if (data && data.payload)
-                                        {
-                                            $("#content_modal .modal-content").empty().html(data.payload);
-                                            $("#content_modal").modal('show');
-                                        }
-                                    });
-                                }
+                        }
+                    },
+                    edit: {
+                        name: "Modify",
+                        callback: function(key, opt){
+                            var row = opt.$trigger[0]
+                            var data = projectsTable.row(row).data();
+                            let projectId = data.projectId;
+                            if (projectId != null && projectId != "")
+                            {
+                                $.get("/projects/editmodal", { projectId: projectId }, function (data, status, xhr) {
+                                    if (data && data.payload)
+                                    {
+                                        $("#content_modal .modal-content").empty().html(data.payload);
+                                        $("#content_modal").modal('show');
+                                    }
+                                });
                             }
-                        
+                        }
+                    
+                    },
+                    remove: {
+                        name: "Remove",
+                         callback: function(key, opt){
+                            var row = opt.$trigger[0]
+                            var data = projectsTable.row(row).data();
+                            let projectId = data.projectId;
+                            if (projectId != null && projectId != "")
+                            {
+                                $.get("/projects/removemodal", { projectId: projectId }, function (data, status, xhr) {
+                                    if (data && data.payload)
+                                    {
+                                        $("#content_modal .modal-content").empty().html(data.payload);
+                                        $("#content_modal").modal('show');
+                                    }
+                                });
+                            }
                         }
                     }
-                });
-
-            //$('#projects_table tbody').on('click', 'tr', function () {
-            //    var data = projectsTable.row(this).data();
-            //    let projectId = data.projectId;
-            //    if (projectId != null && projectId != "")
-            //    {
-            //        $.get("/projects/detailsmodal", { projectId: projectId }, function (data, status, xhr) {
-            //            if (data && data.payload)
-            //            {
-            //                $("#content_modal .modal-content").empty().html(data.payload);
-            //                $("#content_modal").modal('show');
-            //            }
-            //        });
-            //    }
-            //});
+                }
+            });
 
             $("#btn-new-project").click(function () {          
                 $.get({
                     url: "/projects/creationmodal",
                     dataType: "json",
                     success: function(data) {
-                        //debugger;
                         var newFormHTML = data.payload;
-                        var container = $("#content_modal .modal-content")[0];
-                        $("#content_modal .modal-content").empty().html(newFormHTML)
-                        var forms = container.getElementsByTagName("form");
-                        var newForm = forms[forms.length - 1];
-                        //$.validator.unobtrusive.parse(newForm);
+                        $("#content_modal .modal-content").empty().html(newFormHTML);    
                         $("#content_modal").modal('show');
                     }
                 });

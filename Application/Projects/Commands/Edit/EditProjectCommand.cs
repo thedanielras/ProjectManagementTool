@@ -51,8 +51,8 @@ namespace Application.Projects.Commands.Edit
             entity.ProjectSources = request.ProjectSources.Select(ps => new ProjectSource { ProjectSourceId = ps.ProjectSourceId, SourceUrl = ps.SourceUrl, Type = ps.Type }).ToList();
             
             await _context.SaveChangesAsync(cancellationToken);
-
-            return Result.Success();
+            var projectOperationResultDto = _mapper.Map<ProjectOperationResultDto>(entity);
+            return Result.SuccessWithJsonPayload(projectOperationResultDto);
         }
     }
 

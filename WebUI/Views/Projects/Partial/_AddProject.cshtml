@@ -58,6 +58,7 @@
     var projectSourceIndex = 0; 
 
     $(document).ready(function () {   
+        App.refreshValidationForFormWithSelector("#add-project-form");
         addProjectSourceEntryToForm();
     })
 
@@ -121,7 +122,7 @@
         $("#add-project-form_project-sources-container").append(html);
 
         projectSourceIndex++;
-        refreshValidationForFormWithSelector("#add-project-form");
+        App.refreshValidationForFormWithSelector("#add-project-form");
     }
 
     function serializeAddProjectForm() {     
@@ -132,18 +133,15 @@
     function addProjectSubmitData(data) {       
         $.ajax({
             type: "POST",
-            url: "/projects/addProject",
-            data: data,
-            statusCode: {
-                200: function(data) {
-                    if (!data || !data.succeded) { return; } 
-                    $("#content_modal").modal('hide');
-                    $("#content_modal .modal-content").empty();    
-                    showSuccessAlertWithMessage("Project added with success");
-                    var projectsTable = $('#projects_table').DataTable();
-                    projectsTable.ajax.reload();
-                }
-            }
+            url: "/projects/add",
+            data: data
+        }).done(function(data) {
+            if (!data || !data.succeded) { return; } 
+            let projectName = (data.payload && data.payload.name) ? data.payload.name : "";
+            App.flushContentModal();
+            App.toaster.showSingle(ToastType.success, "Project <b>"+projectName+"</b> added with success.");            
+            var projectsTable = $('#projects_table').DataTable();
+            projectsTable.ajax.reload();
         });
     }
 </script>

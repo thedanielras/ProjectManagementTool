@@ -2,33 +2,31 @@
 @model ProjectDetailsViewModel;
 
 <div class="modal-header">
-    <h5 class="modal-title">@Model.Project.Name</h5>
+    <h5 class="modal-title">Project @Model.Project.Name</h5>
     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 </div>
 <div class="modal-body">
 
     <!-- Project name -->
     <div class="mt-3">
-        <p>Project Name</p>
+        <p><b>Name</b></p>
         <p>@Model.Project.Name</p>
     </div>
     <!-- Department -->
     <div class="mt-3">
-        <p>Project Department</p>
+        <p><b>Department</b></p>
         <p>@Model.Project.Department.Name</p>
     </div>
     <!-- Responsible user -->
     <div class="mt-3">
-        <p>Project Responsible User</p>
+        <p><b>Responsible User</b></p>
         <p>@Model.Project.ResponsibleUser.Name</p>
     </div>
-    @if (Model.Project.ForeignResponsibleUser != null)
-    {
-        <div class="mt-3">
-            <p>Project Responsible User Italia</p>
-            <p>@Model.Project.ForeignResponsibleUser.Name</p>
-        </div>
-    }
+    <!-- Foreign Responsible user -->
+    <div class="mt-3">
+        <p><b>Foreign Responsible User</b></p>
+        <p>@(Model.Project.ForeignResponsibleUser?.Name ?? "-")</p>
+    </div>  
 
     @if(Model.Project.ProjectSources != null && Model.Project.ProjectSources.Any()) 
     {
@@ -37,12 +35,12 @@
         {
             <div class="mt-3">           
                 <div class="row">
-                    <div class="col-12"> <p>Project Source @projectSource.index</p></div>
+                    <div class="col-12"> <p><b>Project Source @projectSource.index</b></p></div>
                     <div class="col-8">
                         <a href="@projectSource.value.SourceUrl">@projectSource.value.SourceUrl</a>
                     </div>
                       <div class="col-4">
-                          <span>Type: @projectSource.value.Type</span>
+                          <span><b>Type:</b> @projectSource.value.Type</span>
                     </div>
                 </div> 
             </div>

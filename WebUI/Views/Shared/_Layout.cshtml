@@ -20,10 +20,20 @@
                     PM Tool
                 </a>
                 <div class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0"></div>
-                <div id="user_session" class="text-end">
-                    <span><b>@Context.User.Identity.Name</b></span>
-                    <a asp-controller="Accounts" asp-action="Logout" class="btn btn-outline-light me-2">Logout</a>             
-                </div>
+                @if (@Context.User.Identity.IsAuthenticated)
+                {
+                    <div id="user_session" class="text-end">
+                        <span class="me-3">Logged in as: <b>@Context.User.Identity.Name</b></span>
+                        <a asp-controller="Accounts" asp-action="Logout" class="btn btn-outline-light me-2">Logout</a>
+                    </div>
+                }
+                else
+                {
+                    <div id="user_session" class="text-end">
+                        <a asp-controller="Accounts" asp-action="SingIn" class="btn btn-outline-light me-2">Login</a>
+                        <a asp-controller="Accounts" asp-action="Register" class="btn btn-warning">Registration</a>
+                    </div>
+                }           
             </div>
         </div>
     </header>
@@ -36,6 +46,7 @@
     <partial name="~/Views/Partial/Common/_ErrorModal.cshtml" />
     <partial name="~/Views/Partial/Common/_AlertContainer.cshtml" />
 
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
     <script type="text/javascript" src="~/lib/jquery/jquery.min.js"></script>
     <script type="text/javascript" src="~/lib/jquery-validate/jquery.validate.js"></script>
     <script type="text/javascript" src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
@@ -43,6 +54,11 @@
     <script type="text/javascript" src="https://cdn.datatables.net/v/bs5/dt-1.11.3/sl-1.3.3/datatables.min.js"></script>   
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.contextMenu.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.ui.position.js"></script>
+
+    <script src="~/src/js/App.js"></script>
+    <script src="~/src/js/Helper.js"></script>
+    <script src="~/src/js/Result.js"></script>
+    <script src="~/src/js/Components.js"></script>
     <script src="~/src/js/main.js"></script>
     @RenderSection("scripts", false)
 </body>

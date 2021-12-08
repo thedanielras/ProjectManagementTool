@@ -13,5 +13,6 @@ namespace Application.Projects.Queries.GetAllProjects
         public string Name { get; set; }
         public DepartmentBriefDto Department { get; set; }
         public UserBriefDto ResponsibleUser { get; set; }
+        public UserBriefDto ForeignResponsibleUser { get; set; }
     }   
 }

@@ -1,6 +1,7 @@
 ﻿using Application.Common.Interfaces;
 using Application.Common.Mappings;
 using Application.Common.Models;
+using Application.Projects.Queries.CommonDtos;
 using AutoMapper;
 using Domain.Entities;
 using Domain.Enums;
@@ -55,8 +56,8 @@ namespace Application.Projects.Commands.Create
 
             _context.Projects.Add(entity);
             var id = await _context.SaveChangesAsync(cancellationToken);
-
-            return Result.Success();
+            var projectOperationResultDto = _mapper.Map<ProjectOperationResultDto>(entity);
+            return Result.SuccessWithJsonPayload(projectOperationResultDto);
         }
     }
 

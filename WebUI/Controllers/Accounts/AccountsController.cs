@@ -1,4 +1,5 @@
 ﻿using Application.Common.Interfaces.Repositories;
+using Application.Common.Models;
 using Application.Users.Commands.Create;
 using Application.Users.Queries.GetByNameAndPassword;
 using Microsoft.AspNetCore.Authentication;
@@ -33,14 +34,21 @@ namespace WebUI.Controllers
         public async Task<IActionResult> SingIn([FromForm] GetUserByNameAndPasswordQuery command) 
         {
             var user = await Mediator.Send(command);
+            Result result;
 
             if (user != null)
             {
                 await Authenticate(command.UserName);
-                return RedirectToAction("List", "Projects");
-            }         
+                result = Result.Success();
+                result.IsRedirect = true;
+                result.RedirectAddress = this.Url.Action("List", "Projects");
+                return Json(result);
+            } else 
+            {
+                result = Result.Error(new List<string> { "Invalid user name or password." });
+            }    
             
-            return View();
+           return Json(result);
         }
 
         [HttpGet]
@@ -63,7 +71,7 @@ namespace WebUI.Controllers
                 return Json(result);
             }
 
-          
+            result.Errors.Append("Test error 1");
             return Json(result);
         }
 
