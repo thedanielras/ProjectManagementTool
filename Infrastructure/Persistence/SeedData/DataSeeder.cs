@@ -18,9 +18,15 @@ namespace Infrastructure.Persistence.SeedData
             var javaDepartmentGuid = new Guid("{E3E81151-2092-4921-8F8C-E0FE3800FA4D}");
             var dotnetDepartmentGuid = new Guid("{6D0484D4-B777-439C-8174-EB2B213349B8}");
             var sampleJavaProjectSourceGuid = new Guid("{12C74E66-D8D1-4966-9C88-18F3666740E8}");
-            var sampleDotNetProjectSourceGuid = new Guid("{3B3C7093-D954-488B-930A-4AD6EADD2987}");                                
+            var sampleDotNetProjectSourceGuid = new Guid("{3B3C7093-D954-488B-930A-4AD6EADD2987}");
 
-            var adminUser = new User { UserId = adminUserGuid, Name = "admin", Password = "password" };
+            var userRoleGuid = new Guid("{703CCCC6-2A7D-4D31-93BE-0809C77B7EBF}");
+            var adminRoleGuid = new Guid("{EDE5E059-6960-410C-8164-224660D6705B}");
+            var userRole = new Role() { RoleId = userRoleGuid, Name = "user" };
+            var adminRole = new Role() { RoleId = adminRoleGuid, Name = "admin" };
+            modelBuilder.Entity<Role>().HasData(userRole, adminRole);
+
+            var adminUser = new User { UserId = adminUserGuid, Name = "admin", Password = "password", RoleId = adminRoleGuid };
             modelBuilder.Entity<User>().HasData(adminUser);
 
             var javaDepartment = new Department { DepartmentId = javaDepartmentGuid, Name = "Java" };

@@ -10,6 +10,9 @@ namespace Domain.Entities
         public string Name { get; set; }
         public string Password { get; set; }
 
+        public Guid? RoleId { get; set; }
+        public Role Role { get; set; }
+
         public IEnumerable<Project> Projects { get; set; }
     }
 }
