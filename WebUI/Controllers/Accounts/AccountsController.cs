@@ -2,6 +2,7 @@
 using Application.Common.Models;
 using Application.Users.Commands.Create;
 using Application.Users.Queries.GetByNameAndPassword;
+using Domain.Entities;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
@@ -38,7 +39,7 @@ namespace WebUI.Controllers
 
             if (user != null)
             {
-                await Authenticate(command.UserName);
+                await Authenticate(user);
                 result = Result.Success();
                 result.IsRedirect = true;
                 result.RedirectAddress = this.Url.Action("List", "Projects");
@@ -61,25 +62,28 @@ namespace WebUI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register([FromForm] CreateUserCommand command)
         { 
-            var result = await Mediator.Send(command);
-
-            if (result.Succeded)
+            var user = await Mediator.Send(command);
+            Result result;
+            if (user != null)
             {
-                await Authenticate(command.UserName);
+                await Authenticate(user);
+                result = Result.Success();
                 result.IsRedirect = true;
                 result.RedirectAddress = this.Url.Action("List", "Projects");
                 return Json(result);
-            }
+            } else 
+            {
+                result = Result.Error(new List<string> { "Something went wrong." });
+            } 
 
-            result.Errors.Append("Test error 1");
             return Json(result);
         }
 
-        private async Task Authenticate(string userName)
+        private async Task Authenticate(User user)
         {
             var claims = new List<Claim>
             {
-                new Claim(ClaimsIdentity.DefaultNameClaimType, userName)
+                new Claim(ClaimsIdentity.DefaultNameClaimType, user.Name)
             };
         
             ClaimsIdentity id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);

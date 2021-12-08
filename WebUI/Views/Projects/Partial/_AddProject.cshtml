@@ -25,7 +25,7 @@
         <div class="mt-3">
             <label for="add-project-form_responsible-user" class="form-label">Responsible user</label>
             <select asp-for="Project.ResponsibleUserId" asp-items="Model.UserSelectList" class="form-select">
-                 <option selected value="">Responsible User</option>
+                 <option value="">Responsible User</option>
             </select>            
             <span asp-validation-for="Project.ResponsibleUserId" class="px-1 text-danger"></span>
         </div>

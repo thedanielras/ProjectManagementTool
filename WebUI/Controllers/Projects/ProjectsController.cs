@@ -10,6 +10,7 @@ using Application.Projects.Queries.GetProjectDetails;
 using Application.Projects.Queries.GetProjectEditData;
 using Application.Projects.Queries.GetProjectForRemoval;
 using Application.Users.Queries.GetAll;
+using Application.Users.Queries.GetByName;
 using AutoMapper;
 using Domain.Entities;
 using Domain.Enums;
@@ -22,6 +23,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -145,8 +147,14 @@ namespace WebUI.Controllers
             IEnumerable<SelectListItem> departmentSelectList = allDepartments.Select(x => new SelectListItem { Text = x.Name, Value = x.DepartmentId.ToString() }).ToList();
             IEnumerable<SelectListItem> userSelectList = allUsers.Select(u => new SelectListItem { Text = u.Name, Value = u.UserId.ToString() }).ToList();
             IEnumerable<SelectListItem> projectSourceTypeSelectList = projectSourceTypes;
-
+            
             var vm = new CreateProjectViewModel(departmentSelectList, userSelectList, projectSourceTypeSelectList);
+            var currentUser = await Mediator.Send(new GetUserByNameQuery(User.Identity.Name));
+            if (currentUser != null)
+            {
+                vm.Project.ResponsibleUserId = currentUser.UserId;
+            }
+
             var view = await ViewRenderService.RenderToStringAsync("~/Views/Projects/Partial/_AddProject.cshtml", vm);
             var result = Result.SuccessWithHtmlPayload(view);
             return Json(result);

@@ -13,14 +13,14 @@ using System.Threading.Tasks;
 
 namespace Application.Users.Commands.Create
 {
-    public class CreateUserCommand : IRequest<Result>
+    public class CreateUserCommand : IRequest<User>
     {
         public string UserName { get; set; }
         public string Password { get; set; }
         public string RepeatPassword { get; set; }
     }
 
-    public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Result>
+    public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, User>
     {
         private readonly IProjectManagementToolDbContext _context;
         private readonly IMapper _mapper;
@@ -31,7 +31,7 @@ namespace Application.Users.Commands.Create
             _mapper = mapper;
         }
 
-        public async Task<Result> Handle(CreateUserCommand request, CancellationToken cancellationToken)
+        public async Task<User> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
             var entity = new User();
             entity.Name = request.UserName;
@@ -46,7 +46,7 @@ namespace Application.Users.Commands.Create
             _context.Users.Add(entity);
             await _context.SaveChangesAsync(cancellationToken);
 
-            return Result.Success();
+            return entity;
         }        
     }
 }

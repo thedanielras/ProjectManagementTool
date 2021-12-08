@@ -13,6 +13,7 @@ namespace WebUI.ViewModels.Project.Create
             DepartmentSelectList = departmentSelectList;
             UserSelectList = userSelectList;
             ProjectSourceTypeSelectList = projectSourceTypeSelectList;
+            Project = new CreateProjectCommand();
         }
 
         public IEnumerable<SelectListItem> DepartmentSelectList { get; private set; }
