@@ -11,6 +11,7 @@ using Application.Projects.Queries.GetProjectEditData;
 using AutoMapper;
 using Domain.Entities;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.Projects.Commands.Edit 
 {
@@ -37,6 +38,16 @@ namespace Application.Projects.Commands.Edit
 
         public async Task<Result> Handle(EditProjectCommand request, CancellationToken cancellationToken)
         {
+            var projectWithSameDataExists = await _context.Projects
+                .FirstOrDefaultAsync(p => p.Name == request.Name 
+                        && p.DepartmentId == request.DepartmentId 
+                        && p.ProjectId != request.ProjectId) != null;
+            
+            if(projectWithSameDataExists)
+            {
+                throw new ValidationException("Another project with the same name and department already exists.");
+            }
+            
             var entity = _context.Projects.SingleOrDefault(p => p.ProjectId == request.ProjectId);
             
             if (entity == null)

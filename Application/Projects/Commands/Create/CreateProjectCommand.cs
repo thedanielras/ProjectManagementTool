@@ -1,4 +1,5 @@
-﻿using Application.Common.Interfaces;
+﻿using Application.Common.Exceptions;
+using Application.Common.Interfaces;
 using Application.Common.Mappings;
 using Application.Common.Models;
 using Application.Projects.Queries.CommonDtos;
@@ -6,6 +7,7 @@ using AutoMapper;
 using Domain.Entities;
 using Domain.Enums;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,6 +44,14 @@ namespace Application.Projects.Commands.Create
 
         public async Task<Result> Handle(CreateProjectCommand request, CancellationToken cancellationToken)
         {
+            var projectWithSameDataExists = await _context.Projects
+                .FirstOrDefaultAsync(p => p.Name == request.Name && p.DepartmentId == request.DepartmentId) != null;
+            
+            if(projectWithSameDataExists)
+            {
+                throw new ValidationException("A project with the same name and department already exists.");
+            }
+
             var entity = new Project();
             entity.Name = request.Name;
             entity.DepartmentId = request.DepartmentId;
