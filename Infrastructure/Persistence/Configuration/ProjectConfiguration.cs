@@ -13,6 +13,10 @@ namespace Infrastructure.Persistence.Configuration
         {
             builder
                 .HasKey(p => p.ProjectId);
+
+            builder
+                .HasIndex(p => new { p.Name, p.DepartmentId})
+                .IsUnique();
                        
             builder
                 .Property(p => p.Name)
