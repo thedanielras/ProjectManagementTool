@@ -361,3 +361,9 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+WebUI/appsettings.Development.json
+WebUI/wwwroot/lib/*
+elk-docker-context/elasticsearch/nodes
+elk-docker-context/elasticsearch/obj
+elk-docker-context/kibana/nodes
+elk-docker-context/kibana/obj

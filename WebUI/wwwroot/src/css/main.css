@@ -1,0 +1,6 @@
+﻿.alert-container-fixed {
+    position: fixed;
+    top: 75px;
+    left: 0;
+    width: 100%;
+}

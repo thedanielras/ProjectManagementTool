@@ -1,0 +1,39 @@
+@using WebUI.ViewModels.Project.Remove
+@model RemoveProjectViewModel
+<div class="modal-header">
+    <h5 class="modal-title">Confirm</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body">
+    <form id="project-removal-form" asp-action="Remove" asp-controller="Projects">
+        <input type="hidden" asp-for="Project.ProjectId" >
+    </form>
+   <p clas="mb-0">Please confirm removal of project <b>@Model.Project.Name</b></p>
+</div>
+<div class="modal-footer">
+    <button id="roject-removal_confirm-btn" type="button" class="btn btn-primary" data-bs-dismiss="modal">Confirm</button>
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+</div>
+<script>
+    $(document).ready(function() {       
+        $("#roject-removal_confirm-btn").click(function() {
+            $("#project-removal-form").submit();
+        });
+        $("#project-removal-form").submit(function (event) {
+            event.preventDefault();
+            var formData = $("#project-removal-form").serializeArray();
+            $.ajax({
+                type: "DELETE",
+                url: "/projects/remove",
+                data: formData
+            }).done(function(data) {
+                if (!data || !data.succeded) { return; } 
+                let projectName = (data.payload && data.payload.name) ? data.payload.name : "";
+                App.flushContentModal();
+                App.toaster.showSingle(ToastType.success, "Project <b>"+projectName+"</b> removed.");            
+                var projectsTable = $('#projects_table').DataTable();
+                projectsTable.ajax.reload();
+            });                
+        });
+    });
+</script>

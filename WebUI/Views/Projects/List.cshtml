@@ -1,0 +1,121 @@
+﻿@{
+    ViewBag.Title = "Projects";
+}
+
+<div class="container">
+    <h2 class="text-star">Projects</h2>
+    <table id="projects_table" class="table table-hover">
+        <thead>
+            <tr>
+                <th>Project name</th>
+                <th>Department</th>
+                <th>Internal responsible</th>
+                <th>Foreign responsible</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    <button id="btn-new-project" type="button" class="btn btn-primary mt-3">New Project</button>
+</div>
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+          var projectsTable = $('#projects_table').DataTable(
+                {
+                    ajax: {
+                        url: "/api/projects/list",
+                        dataSrc: "payload",
+                    },
+                    columns:
+                    [
+                        { data: "name" },
+                        { data: "department.name" },
+                        { data: "responsibleUser.name" },
+                        { data: function(row) {
+                            if(row.foreignResponsibleUser && row.foreignResponsibleUser.name)
+                            {
+                                return row.foreignResponsibleUser.name;
+                            }
+                            return "-";
+                        }}
+                    ]
+                }
+            );
+
+            $.contextMenu({
+                selector: '#projects_table tbody tr',
+                items: {
+                    details: {
+                        name: "Details",
+                        callback: function(key, opt) {
+                            var row = opt.$trigger[0]
+                            var data = projectsTable.row(row).data();
+                            let projectId = data.projectId;
+                            if (projectId != null && projectId != "")
+                            {
+                                $.get("/projects/detailsmodal", { projectId: projectId }, function (data, status, xhr) {
+                                    if (data && data.payload)
+                                    {
+                                        $("#content_modal .modal-content").empty().html(data.payload);
+                                        $("#content_modal").modal('show');
+                                    }
+                                });
+                            }
+                        }
+                    },
+                    edit: {
+                        name: "Modify",
+                        callback: function(key, opt){
+                            var row = opt.$trigger[0]
+                            var data = projectsTable.row(row).data();
+                            let projectId = data.projectId;
+                            if (projectId != null && projectId != "")
+                            {
+                                $.get("/projects/editmodal", { projectId: projectId }, function (data, status, xhr) {
+                                    if (data && data.payload)
+                                    {
+                                        $("#content_modal .modal-content").empty().html(data.payload);
+                                        $("#content_modal").modal('show');
+                                    }
+                                });
+                            }
+                        }
+                    
+                    },
+                    remove: {
+                        name: "Remove",
+                         callback: function(key, opt){
+                            var row = opt.$trigger[0]
+                            var data = projectsTable.row(row).data();
+                            let projectId = data.projectId;
+                            if (projectId != null && projectId != "")
+                            {
+                                $.get("/projects/removemodal", { projectId: projectId }, function (data, status, xhr) {
+                                    if (data && data.payload)
+                                    {
+                                        $("#content_modal .modal-content").empty().html(data.payload);
+                                        $("#content_modal").modal('show');
+                                    }
+                                });
+                            }
+                        }
+                    }
+                }
+            });
+
+            $("#btn-new-project").click(function () {          
+                $.get({
+                    url: "/projects/creationmodal",
+                    dataType: "json",
+                    success: function(data) {
+                        var newFormHTML = data.payload;
+                        $("#content_modal .modal-content").empty().html(newFormHTML);    
+                        $("#content_modal").modal('show');
+                    }
+                });
+            });
+        });
+    </script>
+}

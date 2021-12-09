@@ -3,11 +3,18 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Application.Common.Interfaces
 {
-    interface IProjectManagementToolDbContext
+    public interface IProjectManagementToolDbContext
     {
-        DbSet<Project> Projects { get; set; }
+        public DbSet<Project> Projects { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<Role> UserRoles { get; set; }
+        public DbSet<Department> Departments { get; set; }
+
+        Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }
 }

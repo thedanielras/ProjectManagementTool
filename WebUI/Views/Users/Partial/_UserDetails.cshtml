@@ -1,0 +1,40 @@
+﻿@using WebUI.ViewModels.User.Details
+@model UserDetailsViewModel
+
+<div class="modal-header">
+    <h5 class="modal-title">User @Model.User.Name</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body">
+
+    <!-- User name -->
+    <div class="mt-3">
+        <p><b>Name</b></p>
+        <p>@Model.User.Name</p>
+    </div>
+    <!-- Password -->
+    <div class="mt-3">
+        <p><b>Password</b></p>
+        <p>@Model.User.Password</p>
+    </div>
+    <!-- Role -->
+    <div class="mt-3">
+        <p><b>Role</b></p>
+        <p>@(Model.User.Role?.Name ?? "user")</p>
+    </div>
+
+    <!-- Projects -->
+    @if(Model.User.Projects != null && Model.User.Projects.Any()) 
+    {
+        <h5 class="mt-3 text-center">Projects</h5>
+        <ol class="list-group">         
+           @foreach(var project in Model.User.Projects)
+           {
+                <li class="list-group-item">@project.Name</li>
+           }              
+        </ol>       
+    }  
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+</div>
