@@ -1,14 +1,12 @@
-﻿@using WebUI.ViewModels.User.Edit
-@model EditUserViewModel
+@using WebUI.ViewModels.User.Create
+@model CreateUserViewModel
 
 <div class="modal-header">
-    <h5 class="modal-title">Edit user @Model.User.Name</h5>
+    <h5 class="modal-title">Create user @Model.User.Name</h5>
     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 </div>
 <div class="modal-body">
-    <form asp-controller="Users" asp-action="Edit" method="post" id="edit-user_form" >
-         <!-- User Id -->
-         <input type="hidden" asp-for="User.UserId">
+    <form asp-controller="Users" asp-action="Create" method="post" id="create-user_form" >
         <!-- User name -->
         <div class="mt-3">
             <label asp-for="User.Name" class="form-label"></label>
@@ -38,26 +36,26 @@
 
 <script>
     $(document).ready(function() {
-        App.refreshValidationForFormWithSelector("#edit-user_form");
+        App.refreshValidationForFormWithSelector("#create-user_form");
 
         $("#submit_form").click(function () {
-            $("#edit-user_form").submit();
+            $("#create-user_form").submit();
         });
 
-        $("#edit-user_form").submit(function (event) {
+        $("#create-user_form").submit(function (event) {
             event.preventDefault();
             $(this).validate()
             if($(this).valid()) {
                 var formData = $(this).serializeArray();
                 $.ajax({
                     type: "POST",
-                    url: "/users/edit",
+                    url: "/users/create",
                     data: formData
                 }).done(function(data) {
                     if (!data || !data.succeded) { return; } 
                     let userName = (data.payload && data.payload.name) ? data.payload.name : "";
                     App.flushContentModal();
-                    App.toaster.showSingle(ToastType.success, "Project <b>"+userName+"</b> edited with success.");  
+                    App.toaster.showSingle(ToastType.success, "Project <b>"+userName+"</b> created with success.");  
                     var projectsTable = $('#users_table').DataTable();
                     projectsTable.ajax.reload();
                 });

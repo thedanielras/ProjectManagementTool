@@ -83,35 +83,35 @@
                     remove: {
                         name: "Remove",
                          callback: function(key, opt){
-                            //var row = opt.$trigger[0]
-                            //var data = projectsTable.row(row).data();
-                            //let projectId = data.projectId;
-                            //if (projectId != null && projectId != "")
-                            //{
-                            //    $.get("/projects/removemodal", { projectId: projectId }, function (data, status, xhr) {
-                            //        if (data && data.payload)
-                            //        {
-                            //            $("#content_modal .modal-content").empty().html(data.payload);
-                            //            $("#content_modal").modal('show');
-                            //        }
-                            //    });
-                            //}
+                            var row = opt.$trigger[0]
+                            var data = usersTable.row(row).data();
+                            let userId = data.userId;
+                            if (userId != null && userId != "")
+                            {
+                                $.get("/users/removemodal", { userId: userId }, function (data, status, xhr) {
+                                    if (data && data.payload)
+                                    {
+                                        $("#content_modal .modal-content").empty().html(data.payload);
+                                        $("#content_modal").modal('show');
+                                    }
+                                });
+                            }
                         }
                     }
                 }
             });
 
-            //$("#btn-new-project").click(function () {          
-            //    $.get({
-            //        url: "/projects/creationmodal",
-            //        dataType: "json",
-            //        success: function(data) {
-            //            var newFormHTML = data.payload;
-            //            $("#content_modal .modal-content").empty().html(newFormHTML);    
-            //            $("#content_modal").modal('show');
-            //        }
-            //    });
-            //});
+            $("#btn-new-user").click(function () {          
+                $.get({
+                    url: "/users/creationmodal",
+                    dataType: "json",
+                    success: function(data) {
+                        var newFormHTML = data.payload;
+                        $("#content_modal .modal-content").empty().html(newFormHTML);    
+                        $("#content_modal").modal('show');
+                    }
+                });
+            });
         });
     </script>
 }

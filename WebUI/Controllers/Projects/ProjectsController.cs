@@ -39,24 +39,21 @@ using WebUI.ViewModels.Project.Remove;
 
 namespace WebUI.Controllers
 {
+    [Authorize]
     public class ProjectsController : BaseController<ProjectsController>
     {
-        [Authorize]
         [HttpGet]
         public IActionResult Index() /*Entry point*/
         {
             return new RedirectToActionResult("List", "Projects", new { }, true);
         }
 
-        [Authorize]
         [HttpGet]
         public IActionResult List()
         {
             return View();
         }
 
-        [Authorize]
-        [ApiExplorerSettings(IgnoreApi = true)]
         [HttpGet]
         public async Task<IActionResult> DetailsModal(Guid projectId)
         {
@@ -90,8 +87,6 @@ namespace WebUI.Controllers
             return Json(result);
         }
 
-        [Authorize]
-        [ApiExplorerSettings(IgnoreApi = true)]
         [HttpGet]
         public async Task<IActionResult> EditModal(Guid projectId)
         {
@@ -125,8 +120,6 @@ namespace WebUI.Controllers
             return Json(result);
         }
 
-        [Authorize]
-        [ApiExplorerSettings(IgnoreApi = true)]
         [HttpPost]
         public async Task<IActionResult> Edit([FromForm][Bind(Prefix = "Project")] EditProjectCommand command)
         {
@@ -134,8 +127,6 @@ namespace WebUI.Controllers
             return Json(result);
         }
 
-        [Authorize]
-        [ApiExplorerSettings(IgnoreApi = true)]
         [HttpGet]
         public async Task<IActionResult> CreationModal()
         {         
@@ -160,8 +151,6 @@ namespace WebUI.Controllers
             return Json(result);
         }
 
-        [Authorize]
-        [ApiExplorerSettings(IgnoreApi = true)]
         [HttpPost]
         public async Task<IActionResult> Add([FromForm][Bind(Prefix = "Project")] CreateProjectCommand command)
         {
@@ -169,8 +158,6 @@ namespace WebUI.Controllers
             return Json(result);
         }
        
-        [Authorize]
-        [ApiExplorerSettings(IgnoreApi = true)]
         [HttpGet]
         public async Task<IActionResult> RemoveModal([FromQuery] GetProjectForRemovalQuery query) 
         {
@@ -182,8 +169,6 @@ namespace WebUI.Controllers
             return Json(result);
         }
 
-        [Authorize]
-        [ApiExplorerSettings(IgnoreApi = true)]
         [HttpDelete]
         public async Task<IActionResult> Remove([FromForm][Bind(Prefix = "Project")] RemoveProjectCommand command)
         {
