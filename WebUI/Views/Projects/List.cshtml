@@ -25,9 +25,11 @@
           var projectsTable = $('#projects_table').DataTable(
                 {
                     ajax: {
-                        url: "/api/projects/list",
-                        dataSrc: "payload",
+                        url: "/api/projects/datatable",
+                        type: "POST",
+                        dataSrc: "data",
                     },
+                    serverSide: true,
                     columns:
                     [
                         { data: "name" },

@@ -1,4 +1,5 @@
 ﻿using Application.Projects.Queries.GetAllProjects;
+using Application.Projects.Queries.GetProjectsDataTable;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -20,6 +21,14 @@ namespace WebUI.Controllers.Api.Projects
         {          
             var result = await Mediator.Send(query);
                         
+            return new JsonResult(result);
+        }
+
+        [HttpPost("datatable")]
+        public async Task<JsonResult> DataTable([FromForm] GetProjectsDataTableQuery query)
+        {
+            var result = await Mediator.Send(query);
+
             return new JsonResult(result);
         }
 

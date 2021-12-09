@@ -52,13 +52,17 @@ namespace WebUI.Filters
             context.Result = new NotFoundObjectResult(Result.Error(new List<string> { "Entity not found!" }));
             context.ExceptionHandled = true;
         }        
+        
         private void HandleInvalidModelStateException(ExceptionContext context)
         {
             context.Result = new BadRequestObjectResult(Result.Error(new List<string> { "Ivalid model state!" }));
             context.ExceptionHandled = true;
-        }        
+        }   
+        
         private void HandleUnknownException(ExceptionContext context)
         {
+            var exception = (Exception)context.Exception;
+            Console.WriteLine(exception.Message);
             context.Result = new JsonResult(Result.Error(new List<string> { "Generic Error" }));
             context.ExceptionHandled = true;
         }
