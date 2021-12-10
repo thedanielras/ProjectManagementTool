@@ -23,9 +23,11 @@
           var usersTable = $('#users_table').DataTable(
                 {
                     ajax: {
-                        url: "/api/users/list",
-                        dataSrc: "payload",
+                        url: "/api/users/datatable",
+                        type: "POST",
+                        dataSrc: "data",
                     },
+                    serverSide: true,
                     columns:
                     [
                         { data: "name" },              

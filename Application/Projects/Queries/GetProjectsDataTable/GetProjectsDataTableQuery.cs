@@ -36,18 +36,14 @@ namespace Application.Projects.Queries.GetProjectsDataTable
 
             var allProjectsCount = await _context.Projects.CountAsync();
 
-            var filteredProjectsCount = await _context.Projects
-                .Where(p => p.Name.ToLower().Contains(globalSeach) ||
-                            p.Department.Name.ToLower().Contains(globalSeach) ||
-                            p.ResponsibleUser.Name.ToLower().Contains(globalSeach) ||
-                            p.ForeignResponsibleUser.Name.ToLower().Contains(globalSeach))
-                .CountAsync();
+            var filteredProjectsQuery = _context.Projects
+                            .Where(p => p.Name.ToLower().Contains(globalSeach) ||
+                                p.Department.Name.ToLower().Contains(globalSeach) ||
+                                p.ResponsibleUser.Name.ToLower().Contains(globalSeach) ||
+                                p.ForeignResponsibleUser.Name.ToLower().Contains(globalSeach));
 
-            var projectsQuery = _context.Projects
-                 .Where(p => p.Name.ToLower().Contains(globalSeach) ||
-                            p.Department.Name.ToLower().Contains(globalSeach) ||
-                            p.ResponsibleUser.Name.ToLower().Contains(globalSeach) ||
-                            p.ForeignResponsibleUser.Name.ToLower().Contains(globalSeach))
+            var filteredProjectsCount = await filteredProjectsQuery.CountAsync();
+            var filteredProjectsQueryPaginated = filteredProjectsQuery
                 .Skip(request.Start)
                 .Take(pageSize);
                
@@ -60,25 +56,25 @@ namespace Application.Projects.Queries.GetProjectsDataTable
                 switch (columnIndexToOrder) 
                 {
                     case 0:
-                        projectsQuery = isAscendingOrdering ? projectsQuery.OrderBy(p => p.Name) :
-                                                              projectsQuery.OrderByDescending(p => p.Name);
+                        filteredProjectsQueryPaginated = isAscendingOrdering ? filteredProjectsQueryPaginated.OrderBy(p => p.Name) :
+                                                                               filteredProjectsQueryPaginated.OrderByDescending(p => p.Name);
                         break;
                     case 1:
-                       projectsQuery = isAscendingOrdering ? projectsQuery.OrderBy(p => p.Department.Name) :
-                                                             projectsQuery.OrderByDescending(p => p.Department.Name);
+                       filteredProjectsQueryPaginated = isAscendingOrdering ? filteredProjectsQueryPaginated.OrderBy(p => p.Department.Name) :
+                                                                              filteredProjectsQueryPaginated.OrderByDescending(p => p.Department.Name);
                        break;
                     case 2:
-                       projectsQuery = isAscendingOrdering ? projectsQuery.OrderBy(p => p.ResponsibleUser.Name) :
-                                                             projectsQuery.OrderByDescending(p => p.ResponsibleUser.Name);
+                       filteredProjectsQueryPaginated = isAscendingOrdering ? filteredProjectsQueryPaginated.OrderBy(p => p.ResponsibleUser.Name) :
+                                                                              filteredProjectsQueryPaginated.OrderByDescending(p => p.ResponsibleUser.Name);
                        break;
                     case 3:
-                       projectsQuery = isAscendingOrdering ? projectsQuery.OrderBy(p => p.ForeignResponsibleUser.Name) :
-                                                             projectsQuery.OrderByDescending(p => p.ForeignResponsibleUser.Name);
+                       filteredProjectsQueryPaginated = isAscendingOrdering ? filteredProjectsQueryPaginated.OrderBy(p => p.ForeignResponsibleUser.Name) :
+                                                                              filteredProjectsQueryPaginated.OrderByDescending(p => p.ForeignResponsibleUser.Name);
                        break;
                 }
             }
 
-            var projects = await projectsQuery
+            var projects = await filteredProjectsQueryPaginated
                             .Include(p => p.ResponsibleUser)
                             .Include(p => p.ForeignResponsibleUser)
                             .Include(p => p.Department)

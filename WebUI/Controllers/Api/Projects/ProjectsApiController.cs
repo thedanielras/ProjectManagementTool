@@ -31,6 +31,5 @@ namespace WebUI.Controllers.Api.Projects
 
             return new JsonResult(result);
         }
-
     }
 }
