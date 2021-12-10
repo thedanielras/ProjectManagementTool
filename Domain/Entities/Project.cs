@@ -21,6 +21,7 @@ namespace Domain.Entities
 
         public Guid ResponsibleUserId { get; set; }
         public Guid? ForeignResponsibleUserId { get; set; }
+        public User ForeignResponsibleUser { get; set; }
         public User ResponsibleUser { get; set; }
     }
 }

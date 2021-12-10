@@ -42,10 +42,10 @@ namespace Application.Projects.Queries.GetAllProjects
                 throw new NotFoundException("Something went wrong");
             }
             
-            var projectDtoList = new List<ProjectBriefDto>();
+            var projectDtoList = new List<GetAllProjectsProjectDto>();
             foreach(var project in projects)
             {
-                var projectDto = _mapper.Map<ProjectBriefDto>(project);
+                var projectDto = _mapper.Map<GetAllProjectsProjectDto>(project);
                 if(project.ForeignResponsibleUserId != null)
                 {
                     var foreignResponsibleUser = await _context.Users.FirstOrDefaultAsync(u => u.UserId == project.ForeignResponsibleUserId);

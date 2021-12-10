@@ -40,7 +40,6 @@ namespace Infrastructure.Persistence.Configuration
                 .WithMany(u => u.Projects)
                 .HasPrincipalKey(u => u.UserId)
                 .HasForeignKey(p => p.ResponsibleUserId);                        
-
             /*
             builder.HasData(
             new Project

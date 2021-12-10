@@ -5,9 +5,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Application.Projects.Queries.GetAllProjects
+namespace Application.Projects.Queries.GetProjectsDataTable
 {
-    public  class ProjectBriefDto : IMapFrom<Project>
+    public  class GetProjectsDataTableProjectDto : IMapFrom<Project>
     {
         public Guid ProjectId { get; set; }
         public string Name { get; set; }

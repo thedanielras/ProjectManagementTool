@@ -3,7 +3,7 @@
 }
 
 <div class="container">
-    <h2 class="text-star">Projects</h2>
+    <h2 class="text-star mb-4">Projects</h2>
     <table id="projects_table" class="table table-hover">
         <thead>
             <tr>
@@ -15,8 +15,7 @@
         </thead>
         <tbody>
         </tbody>
-    </table>
-    <button id="btn-new-project" type="button" class="btn btn-primary mt-3">New Project</button>
+    </table>   
 </div>
 
 @section scripts {
@@ -25,11 +24,43 @@
           var projectsTable = $('#projects_table').DataTable(
                 {
                     ajax: {
-                        url: "/api/projects/list",
-                        dataSrc: "payload",
+                        url: "/api/projects/datatable",
+                        type: "POST",
+                        dataSrc: "data",
+                    },
+                    lengthChange: false,
+                    buttons: [
+                        {
+                            text: "Add Project",
+                            action: function ( e, dt, node, config ) {
+                                $.get({
+                                    url: "/projects/creationmodal",
+                                    dataType: "json",
+                                    success: function(data) {
+                                        var newFormHTML = data.payload;
+                                        $("#content_modal .modal-content").empty().html(newFormHTML);    
+                                        $("#content_modal").modal('show');
+                                    }
+                                });
+                            }
+                        },
+                        "copy",
+                        "csv",
+                        {
+                            text: "Reload",
+                            action: function ( e, dt, node, config ) {
+                               dt.ajax.reload()
+                            }
+                        }
+                    ],
+                    serverSide: true,
+                    processing: true,
+                    language: {
+                        loadingRecords: "&nbsp;",
+                        processing: "Loading..."
                     },
                     columns:
-                    [
+                      [
                         { data: "name" },
                         { data: "department.name" },
                         { data: "responsibleUser.name" },
@@ -40,9 +71,14 @@
                             }
                             return "-";
                         }}
-                    ]
+                    ],
+                    initComplete: function() {
+                        $('#projects_table').DataTable().buttons().container().appendTo('#projects_table_wrapper .col-md-6:eq(0)');    
+                    }
                 }
-            );
+            );     
+           
+           
 
             $.contextMenu({
                 selector: '#projects_table tbody tr',
@@ -103,19 +139,7 @@
                         }
                     }
                 }
-            });
-
-            $("#btn-new-project").click(function () {          
-                $.get({
-                    url: "/projects/creationmodal",
-                    dataType: "json",
-                    success: function(data) {
-                        var newFormHTML = data.payload;
-                        $("#content_modal .modal-content").empty().html(newFormHTML);    
-                        $("#content_modal").modal('show');
-                    }
-                });
-            });
+            });           
         });
     </script>
 }
