@@ -32,26 +32,26 @@ namespace Application.Projects.Queries.GetProjectsDataTable
         public async Task<DataTablesResponse<GetProjectsDataTableProjectDto>> Handle(GetProjectsDataTableQuery request, CancellationToken cancellationToken)
         {
             int pageSize = request.Length < 1 ? 1 : request.Length;
-            string globalSeach = request.Search.Value ?? "";
+            string globalSeach = request.Search.Value?.ToLower() ?? "";
 
             var allProjectsCount = await _context.Projects.CountAsync();
 
             var filteredProjectsCount = await _context.Projects
-                .Where(p => p.Name.Contains(globalSeach) ||
-                            p.Department.Name.Contains(globalSeach) ||
-                            p.ResponsibleUser.Name.Contains(globalSeach))
+                .Where(p => p.Name.ToLower().Contains(globalSeach) ||
+                            p.Department.Name.ToLower().Contains(globalSeach) ||
+                            p.ResponsibleUser.Name.ToLower().Contains(globalSeach) ||
+                            p.ForeignResponsibleUser.Name.ToLower().Contains(globalSeach))
                 .CountAsync();
 
             var projectsQuery = _context.Projects
-                .Where(p => p.Name.Contains(globalSeach) || p.Department.Name.Contains(globalSeach))
+                 .Where(p => p.Name.ToLower().Contains(globalSeach) ||
+                            p.Department.Name.ToLower().Contains(globalSeach) ||
+                            p.ResponsibleUser.Name.ToLower().Contains(globalSeach) ||
+                            p.ForeignResponsibleUser.Name.ToLower().Contains(globalSeach))
                 .Skip(request.Start)
-                .Take(pageSize)
-                .Include(p => p.ResponsibleUser)
-                .Include(p => p.Department)
-                .ProjectTo<GetProjectsDataTableProjectDto>(_mapper.ConfigurationProvider);
-
+                .Take(pageSize);
+               
             var order = request.Order.FirstOrDefault();
-
             if (order != null)
             {
                 int columnIndexToOrder = order.Column;
@@ -63,20 +63,29 @@ namespace Application.Projects.Queries.GetProjectsDataTable
                         projectsQuery = isAscendingOrdering ? projectsQuery.OrderBy(p => p.Name) :
                                                               projectsQuery.OrderByDescending(p => p.Name);
                         break;
-                    //case 1:
-                    //    projectsQuery = isAscendingOrdering ? projectsQuery.OrderBy(p => p.Department.Name) :
-                    //                                          projectsQuery.OrderByDescending(p => p.Department.Name);
-                    //    break;
-                    //case 2:
-                    //    projectsQuery = isAscendingOrdering ? projectsQuery.OrderBy(p => p.ResponsibleUser.Name) :
-                    //                                          projectsQuery.OrderByDescending(p => p.ResponsibleUser.Name);
-                    //    break;
+                    case 1:
+                       projectsQuery = isAscendingOrdering ? projectsQuery.OrderBy(p => p.Department.Name) :
+                                                             projectsQuery.OrderByDescending(p => p.Department.Name);
+                       break;
+                    case 2:
+                       projectsQuery = isAscendingOrdering ? projectsQuery.OrderBy(p => p.ResponsibleUser.Name) :
+                                                             projectsQuery.OrderByDescending(p => p.ResponsibleUser.Name);
+                       break;
+                    case 3:
+                       projectsQuery = isAscendingOrdering ? projectsQuery.OrderBy(p => p.ForeignResponsibleUser.Name) :
+                                                             projectsQuery.OrderByDescending(p => p.ForeignResponsibleUser.Name);
+                       break;
                 }
-
             }
 
-            var projects = await projectsQuery.ToListAsync();
-            var response = new DataTablesResponse<GetProjectsDataTableProjectDto>(request.Draw, allProjectsCount, filteredProjectsCount, projects);
+            var projects = await projectsQuery
+                            .Include(p => p.ResponsibleUser)
+                            .Include(p => p.ForeignResponsibleUser)
+                            .Include(p => p.Department)
+                            .ToListAsync();
+            
+            var projectsDto = _mapper.Map<IEnumerable<GetProjectsDataTableProjectDto>>(projects);
+            var response = new DataTablesResponse<GetProjectsDataTableProjectDto>(request.Draw, allProjectsCount, filteredProjectsCount, projectsDto);
             
             return response;
         }
