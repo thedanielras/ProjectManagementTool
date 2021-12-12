@@ -17,26 +17,32 @@
         </div>
         <!-- Department -->
         <div class="mt-3">
-            <label for="add-project-form_department" class="form-label">Department</label>
-            <select asp-for="Project.DepartmentId" asp-items="Model.DepartmentSelectList" class="form-select">
-                   <option selected value="">Department</option>
-            </select>               
+            <div class="row align-items-center">
+                <label for="add-project-form_department" class="mb-2 mb-sm-0 col-12 col-sm-5">Department</label>
+                <select asp-for="Project.DepartmentId" asp-items="Model.DepartmentSelectList" data-live-search="true" class="selectpicker">
+                       <option selected value="">Department</option>
+                </select>               
+            </div>          
             <span asp-validation-for="Project.DepartmentId" class="px-1 text-danger"></span>
         </div>
         <!-- Responsible user -->
         <div class="mt-3">
-            <label for="add-project-form_responsible-user" class="form-label">Responsible user</label>
-            <select asp-for="Project.ResponsibleUserId" asp-items="Model.UserSelectList" class="form-select">
-                 <option selected value="">Responsible User</option>
-            </select>            
+            <div class="row align-items-center">
+                <label for="add-project-form_responsible-user" class="mb-2 mb-sm-0 col-12 col-sm-5">Responsible user</label>
+                <select asp-for="Project.ResponsibleUserId" asp-items="Model.UserSelectList" data-live-search="true" class="selectpicker">
+                     <option selected value="">Responsible User</option>
+                </select>            
+            </div>           
             <span asp-validation-for="Project.ResponsibleUserId" class="px-1 text-danger"></span>
         </div>
         <!-- Responsible user italia -->
         <div class="mt-3">
-            <label for="add-project-form_responsible-user-it" class="form-label">Responsible user italia</label>
-           <select asp-for="Project.ForeignResponsibleUserId" asp-items="Model.UserSelectList" class="form-select">
-                <option selected value="">Responsible User Italia</option>
-           </select>   
+             <div class="row align-items-center">
+                <label for="add-project-form_responsible-user-it" class="mb-2 mb-sm-0 col-12 col-sm-5">Responsible user italia</label>
+               <select asp-for="Project.ForeignResponsibleUserId" asp-items="Model.UserSelectList" data-live-search="true" class="selectpicker">
+                    <option selected value="">Responsible User Italia</option>
+               </select>   
+            </div>           
            <span asp-validation-for="Project.ForeignResponsibleUserId" class="px-1 text-danger"></span>
         </div>
         <h5 class="mt-5 text-center">Sources</h5>
@@ -66,6 +72,7 @@
             addProjectSourceEntryToForm(projectSource);        
         });
         App.refreshValidationForFormWithSelector("#add-project-form");
+        $('.selectpicker').selectpicker();
     })
 
     $("#submit_form").click(function () {
