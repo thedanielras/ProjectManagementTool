@@ -21,10 +21,12 @@
         </div>
         <!-- Role -->
         <div class="mt-3">
-            <label asp-for="User.RoleId" class="form-label">Role</label>
-            <select asp-for="User.RoleId" asp-items="Model.UserRolesSelectList" class="form-select">
-                   <option selected value="">Role</option>
-            </select>               
+            <div class="row">
+                <label asp-for="User.RoleId" class="form-label col-12">Role</label>
+                <select asp-for="User.RoleId" asp-items="Model.UserRolesSelectList" class="selectpicker col-12 mt-2">
+                       <option selected value="">Role</option>
+                </select>  
+            </div>                         
             <span asp-validation-for="User.RoleId" class="px-1 text-danger"></span>
         </div>             
     </form>
@@ -37,11 +39,9 @@
 <script>
     $(document).ready(function() {
         App.refreshValidationForFormWithSelector("#create-user_form");
-
         $("#submit_form").click(function () {
             $("#create-user_form").submit();
         });
-
         $("#create-user_form").submit(function (event) {
             event.preventDefault();
             $(this).validate()
@@ -61,5 +61,6 @@
                 });
             }        
         });
+        $('.selectpicker').selectpicker();
     });
 </script>

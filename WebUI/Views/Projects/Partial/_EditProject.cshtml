@@ -19,7 +19,7 @@
         <div class="mt-3">
             <div class="row align-items-center">
                 <label for="add-project-form_department" class="mb-2 mb-sm-0 col-12 col-sm-5">Department</label>
-                <select asp-for="Project.DepartmentId" asp-items="Model.DepartmentSelectList" data-live-search="true" class="selectpicker">
+                <select asp-for="Project.DepartmentId" asp-items="Model.DepartmentSelectList" data-live-search="true" class="selectpicker col-sm-7">
                        <option selected value="">Department</option>
                 </select>               
             </div>          
@@ -29,7 +29,7 @@
         <div class="mt-3">
             <div class="row align-items-center">
                 <label for="add-project-form_responsible-user" class="mb-2 mb-sm-0 col-12 col-sm-5">Responsible user</label>
-                <select asp-for="Project.ResponsibleUserId" asp-items="Model.UserSelectList" data-live-search="true" class="selectpicker">
+                <select asp-for="Project.ResponsibleUserId" asp-items="Model.UserSelectList" data-live-search="true" class="selectpicker col-sm-7">
                      <option selected value="">Responsible User</option>
                 </select>            
             </div>           
@@ -39,7 +39,7 @@
         <div class="mt-3">
              <div class="row align-items-center">
                 <label for="add-project-form_responsible-user-it" class="mb-2 mb-sm-0 col-12 col-sm-5">Responsible user italia</label>
-               <select asp-for="Project.ForeignResponsibleUserId" asp-items="Model.UserSelectList" data-live-search="true" class="selectpicker">
+               <select asp-for="Project.ForeignResponsibleUserId" asp-items="Model.UserSelectList" data-live-search="true" class="selectpicker col-sm-7">
                     <option selected value="">Responsible User Italia</option>
                </select>   
             </div>           
@@ -129,8 +129,8 @@
         html += '   <input type="text" value="'+currentSourceUrl+'" data-val="true" data-val-required="'+projectSourceValidationMessage+'" class="form-control" id="add-project-form_project-src-' + projectSourceIndex + '" placeholder="URL" name="Project.ProjectSources[' + projectSourceIndex + '].SourceUrl">'
         html += '   <div class="px-1"><span class="text-danger" data-valmsg-for="Project.ProjectSources[' + projectSourceIndex + '].SourceUrl" data-valmsg-replace="true"></span></div>'
         html += '   </div>'
-        html += '       <div class="col-4">'
-        html += '           <select id="add-project-form_project-src-type-' + projectSourceIndex + '" data-val="true" data-val-required="'+projectSourceTypeValidationMessage+'"  name="Project.ProjectSources[' + projectSourceIndex + '].Type" class="form-select">'
+        html += '       <div class="col-12 col-sm-4 mt-2 mt-sm-0">'
+        html += '           <select id="add-project-form_project-src-type-' + projectSourceIndex + '" data-val="true" data-val-required="'+projectSourceTypeValidationMessage+'"  name="Project.ProjectSources[' + projectSourceIndex + '].Type" class="selectpicker col-12">'
         html += '               <option selected value="">Type</option>'
         projectSourceTypes.forEach((projectSourceType) => {
             html += '           <option value="' + projectSourceType.value + '">' + projectSourceType.text + '</option>'
@@ -149,6 +149,7 @@
 
         projectSourceIndex++;
         App.refreshValidationForFormWithSelector("#add-project-form");
+        $('.selectpicker').selectpicker();
     }
 
     function serializeAddProjectForm() {     
