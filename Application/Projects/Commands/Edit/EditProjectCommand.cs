@@ -42,18 +42,27 @@ namespace Application.Projects.Commands.Edit
                 .FirstOrDefaultAsync(p => p.Name == request.Name 
                         && p.DepartmentId == request.DepartmentId 
                         && p.ProjectId != request.ProjectId) != null;
+                        
             
             if(projectWithSameDataExists)
             {
                 throw new ValidationException("Another project with the same name and department already exists.");
             }
             
-            var entity = _context.Projects.SingleOrDefault(p => p.ProjectId == request.ProjectId);
+            var entity = _context.Projects
+                .Include(p => p.ProjectSources)
+                .SingleOrDefault(p => p.ProjectId == request.ProjectId);
             
             if (entity == null)
             {
                 throw new NotFoundException($"Project with id {request.ProjectId} was not found!");
             }
+
+            //rewrite project sources
+            if (entity.ProjectSources.Any()) 
+            {
+                _context.ProjectSources.RemoveRange(entity.ProjectSources);
+            }           
             
             entity.Name = request.Name;
             entity.DepartmentId = request.DepartmentId;
