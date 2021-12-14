@@ -11,6 +11,7 @@ namespace Application.Common.Interfaces
     public interface IProjectManagementToolDbContext
     {
         public DbSet<Project> Projects { get; set; }
+        public DbSet<ProjectSource> ProjectSources { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Role> UserRoles { get; set; }
         public DbSet<Department> Departments { get; set; }

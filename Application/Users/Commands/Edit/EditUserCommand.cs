@@ -48,10 +48,10 @@ namespace Application.Users.Commands.Edit
             entity.Password = request.Password;
             entity.RoleId = request.RoleId;
 
-            var existingUserTest = await _context.Users.FirstOrDefaultAsync(u => u.Name == entity.Name);
+            var existingUserTest = await _context.Users.FirstOrDefaultAsync(u => u.Name == entity.Name && u.UserId != entity.UserId);
             if (existingUserTest != null) 
             {
-                throw new ValidationException("Creation failed. An user with that name is already registered.");
+                throw new ValidationException("Edit failed. An user with that name is already registered.");
             }           
         
             var userResultDto = _mapper.Map<UserResultDto>(entity);
